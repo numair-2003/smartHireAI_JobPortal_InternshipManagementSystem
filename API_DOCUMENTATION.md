@@ -6,8 +6,11 @@ Backend API for the SmartHire AI job portal and internship management system.
 
 - Local API: `http://localhost:5000/api`
 - Local Socket.IO: `http://localhost:5000`
+- Azure API: `https://smarthire-ai-backend-numairfahad.azurewebsites.net/api`
+- Azure Socket.IO: `https://smarthire-ai-backend-numairfahad.azurewebsites.net`
 - Root check: `GET http://localhost:5000/`
 - Health check: `GET http://localhost:5000/api/health`
+- Azure health check: `GET https://smarthire-ai-backend-numairfahad.azurewebsites.net/api/health`
 
 ## Authentication
 
@@ -43,6 +46,7 @@ Create `backend/.env` from `backend/.env.example`.
 | `PORT` | Yes | Backend port, usually `5000` locally |
 | `NODE_ENV` | Recommended | Use `development` locally and `production` after deployment |
 | `MONGO_URI` | Yes | MongoDB local or Atlas connection string |
+| `DNS_SERVERS` | Recommended for Atlas SRV DNS issues | Comma-separated DNS servers, for example `8.8.8.8,8.8.4.4` |
 | `JWT_SECRET` | Yes | Secret used to sign login tokens |
 | `CLOUDINARY_CLOUD_NAME` | Required for uploads | Cloudinary cloud name for resumes and profile photos |
 | `CLOUDINARY_API_KEY` | Required for uploads | Cloudinary API key |
@@ -54,6 +58,7 @@ Create `backend/.env` from `backend/.env.example`.
 | `AI_API_KEY` | Optional | OpenAI API key. If missing, AI routes use demo fallback responses |
 | `ADMIN_EMAIL` | Optional | Email for `npm run create-admin` |
 | `ADMIN_PASSWORD` | Optional | Password for `npm run create-admin` |
+| `SCM_DO_BUILD_DURING_DEPLOYMENT` | Azure only | Use `true` when deploying to Azure App Service from GitHub Actions |
 
 Frontend-only variables such as `REACT_APP_API_URL` and `REACT_APP_SOCKET_URL` belong in the frontend environment, not in `backend/.env`.
 
@@ -457,10 +462,16 @@ Admins cannot delete their own logged-in admin account.
 
 ## Socket.IO Notifications
 
-Socket URL:
+Socket URL locally:
 
 ```text
 http://localhost:5000
+```
+
+Socket URL after Azure backend deployment:
+
+```text
+https://smarthire-ai-backend-numairfahad.azurewebsites.net
 ```
 
 Client joins a personal room after login:
@@ -500,9 +511,11 @@ After running `npm run seed`:
 | --- | --- | --- |
 | Student | `student@smarthire.ai` | `password123` |
 | Recruiter | `recruiter@smarthire.ai` | `password123` |
-| Admin | `admin@smarthire.ai` | `admin123` |
+| Admin | `admin@smarthire.ai` | Set with `ADMIN_PASSWORD` and `npm run create-admin` |
 
-Change demo credentials before using the app publicly.
+Change demo credentials before using the app publicly. If `admin@smarthire.ai` already exists, `npm run create-admin` promotes that account to admin and updates the password when `ADMIN_PASSWORD` is configured.
+
+When `NODE_ENV=production`, `npm run create-admin` requires `ADMIN_PASSWORD` and will not use a demo fallback password.
 
 ## Deployment Notes
 
@@ -512,7 +525,12 @@ Change demo credentials before using the app publicly.
 - Use real Cloudinary credentials for resume and profile photo uploads.
 - Use a Gmail app password or another transactional email provider for email.
 - Azure App Service is the recommended backend host for this project because it can run the Express server as a long-lived Node.js app.
-- In Azure App Service, set the runtime stack to Node 20 LTS and use `npm start` as the startup command.
+- In Azure App Service, set the runtime stack to Node 22 LTS and use `npm start` as the startup command.
+- Use Linux App Service for this project. The Express backend is cross-platform, and Linux is common for Node deployments.
+- Keep `Deployment slot setting` unchecked for environment variables unless deployment slots are being used.
 - Enable WebSockets in Azure App Service when using Socket.IO realtime notifications.
 - Do not set `PORT` manually in Azure. The backend listens on `process.env.PORT || 5000`, and Azure provides the runtime port.
+- If GitHub Actions deployment fails with `No credentials found`, add the full Azure publish profile XML as a GitHub Actions secret named `AZURE_WEBAPP_PUBLISH_PROFILE`.
+- If MongoDB Atlas has SRV DNS issues, set `DNS_SERVERS=8.8.8.8,8.8.4.4`, use Cloudflare WARP, or switch to a non-SRV MongoDB URI.
+- Connect MongoDB Compass to Atlas with the Atlas Compass connection string, replace `<db_password>`, add `/smarthire-ai` after `.net`, and make sure Atlas Network Access allows the current IP.
 - Vercel serverless functions can serve REST API routes, but long-lived Socket.IO/WebSocket realtime should be hosted on a serverful Node.js platform such as Azure App Service or replaced with a managed realtime provider for production.

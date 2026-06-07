@@ -10,10 +10,10 @@ on:
       - '.github/workflows/azure-backend-deploy.yml'
 
 env:
-  # Change this to the exact Azure App Service app name you create.
-  AZURE_WEBAPP_NAME: smarthire-ai-backend
+  # Must match the exact Azure App Service app name.
+  AZURE_WEBAPP_NAME: smarthire-ai-backend-numairfahad
   AZURE_WEBAPP_PACKAGE_PATH: backend
-  NODE_VERSION: '20.x'
+  NODE_VERSION: '22.x'
 
 jobs:
   deploy:

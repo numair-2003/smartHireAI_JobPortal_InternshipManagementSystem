@@ -109,6 +109,33 @@ Backend runs on:
 http://localhost:5000
 ```
 
+### Connect MongoDB Atlas With Compass
+
+Use this when you want to view your Atlas database collections in MongoDB Compass.
+
+1. Open MongoDB Atlas.
+2. Go to `Database` > your cluster > `Connect`.
+3. Select `Compass`.
+4. Copy the connection string.
+5. Open MongoDB Compass.
+6. Click `New Connection`.
+7. Paste the Atlas connection string.
+8. Replace `<db_password>` with the real password for your Atlas database user.
+9. Add the database name after `.net/`, for example:
+
+```text
+mongodb+srv://numair1919_db_user:<db_password>@cluster0.ewy6run.mongodb.net/smarthire-ai?retryWrites=true&w=majority&appName=Cluster0
+```
+
+10. Click `Save & Connect`.
+
+Important notes:
+
+- Keep the local `mongodb://127.0.0.1:27017` connection if you still want local testing. Atlas and local MongoDB are separate connections in Compass.
+- If Compass cannot connect, check Atlas `Network Access` and make sure your current IP or `0.0.0.0/0` is active.
+- If your Wi-Fi has SRV DNS issues, try Cloudflare WARP or use the non-SRV MongoDB URI option below.
+- Never paste the real Atlas password into GitHub, README, screenshots, or chat.
+
 ### MongoDB Atlas DNS Troubleshooting
 
 If the backend fails with a MongoDB Atlas SRV DNS error such as `querySrv ECONNREFUSED`, try these options.
@@ -221,9 +248,20 @@ Demo accounts:
 | --- | --- | --- |
 | Student | `student@smarthire.ai` | `password123` |
 | Recruiter | `recruiter@smarthire.ai` | `password123` |
-| Admin | `admin@smarthire.ai` | `admin123` |
+| Admin | `admin@smarthire.ai` | Set with `ADMIN_PASSWORD` and `npm run create-admin` |
 
 The seed script creates demo jobs, applications, AI resume scores, and notifications.
+
+For production or Azure testing, set a strong `ADMIN_PASSWORD` in `backend/.env` locally and in Azure App Service application settings, then run:
+
+```bash
+cd backend
+npm run create-admin
+```
+
+If `admin@smarthire.ai` already exists, the script promotes that user to admin and updates the password when `ADMIN_PASSWORD` is configured.
+
+When `NODE_ENV=production`, `ADMIN_PASSWORD` is required and the script will refuse to use the demo fallback password.
 
 ## Useful Scripts
 
@@ -306,28 +344,37 @@ The project is intended to be deployed as two separate projects:
 
 The backend is designed for Azure App Service because it runs as a long-lived Node.js Express server and supports Socket.IO better than serverless-only platforms.
 
-Create the backend app in Azure Portal:
+#### 1. Create the Azure backend app
 
-1. Search for `App Services`.
-2. Select `Create` > `Web App`.
-3. Use the Azure for Students subscription.
-4. Create or select a resource group, for example `smarthire-ai-rg`.
-5. Set the app name, for example `smarthire-ai-backend-numair`.
-6. Publish: `Code`.
-7. Runtime stack: `Node 20 LTS`.
-8. Operating System: `Linux`.
-9. Region: choose the closest available region.
-10. Pricing plan: choose the lowest student/free-friendly plan available in your subscription.
+1. Open Azure Portal.
+2. Search for `App Services`.
+3. Click `Create` > `Web App`.
+4. Select the `Azure for Students` subscription.
+5. Select or create the resource group `smarthire-ai-rg`.
+6. App name: `smarthire-ai-backend-numairfahad`.
+7. Publish: `Code`.
+8. Runtime stack: `Node 22 LTS`.
+9. Operating System: `Linux`.
+10. Region: `UAE North` is fine for Pakistan if Azure allows it for the student subscription.
+11. Pricing plan: select `Free F1` if available.
+12. Zone redundancy: keep `Disabled`.
+13. Database tab: skip database creation because this project already uses MongoDB Atlas.
+14. Deployment tab: keep continuous deployment disabled during creation.
+15. Monitor + secure tab: keep Application Insights `No` and Defender unchecked to avoid extra cost.
+16. Click `Review + create`, then `Create`.
 
-Recommended Azure App Service settings:
+Why Linux instead of Windows:
 
-- Startup command: leave blank or use `npm start`
-- WebSockets: `On`
-- Always On: `On` if the selected plan supports it
+- Node.js apps work correctly on Linux App Service.
+- Linux is cheaper and common for Express deployments.
+- Your code does not use Windows-only server features.
+- Azure provides the runtime port automatically through `process.env.PORT`, so the app will still run correctly.
 
-Add backend application settings in Azure:
+#### 2. Add Azure environment variables
 
-Go to the App Service > `Settings` > `Environment variables` or `Configuration` > `Application settings`, then add:
+Open the App Service, then go to `Settings` > `Environment variables` or `Configuration` > `Application settings`.
+
+Add these values one by one. Keep `Deployment slot setting` unchecked for this project.
 
 ```env
 NODE_ENV=production
@@ -342,45 +389,123 @@ EMAIL_PASS=your_gmail_app_password
 FRONTEND_URL=https://your-frontend-vercel-url.vercel.app
 FRONTEND_URLS=https://your-frontend-vercel-url.vercel.app,http://localhost:3000
 AI_API_KEY=your_openai_api_key
+ADMIN_EMAIL=admin@smarthire.ai
+ADMIN_PASSWORD=your_strong_admin_password
 SCM_DO_BUILD_DURING_DEPLOYMENT=true
 ```
 
 Do not add `PORT` manually in Azure. The backend already uses `process.env.PORT || 5000`, and Azure provides the runtime port.
 
-Deploying from GitHub:
+Warnings:
 
-1. In Azure App Service, open `Deployment Center`.
-2. Choose GitHub as the source.
-3. Select this repository.
-4. If Azure asks for a workflow, use `.github/workflows/azure-backend-deploy.yml`.
-5. In GitHub repository settings, add this secret:
+- Do not commit `backend/.env` to GitHub.
+- Do not paste real secrets into README files.
+- Do not add `PORT` in Azure App Service.
+- Do not check `Deployment slot setting` unless you are using Azure deployment slots.
+- After changing environment variables, click `Apply` or `Save`, then restart the App Service.
+- Keep WebSockets enabled for live Socket.IO notifications.
+- Free F1 can sleep, restart, or feel slow. That is normal for student/free hosting.
+- If Azure deployment fails because no credentials were found, add the publish profile secret described below.
+
+#### 3. Configure App Service runtime settings
+
+In the Azure App Service:
+
+1. Go to `Settings` > `Configuration` > `General settings`.
+2. Startup command: use `npm start` if Azure asks for one. Leaving it blank can also work because `backend/package.json` has `"start": "node server.js"`.
+3. WebSockets: `On`.
+4. Always On: `On` only if your pricing plan supports it. Free F1 may not support it.
+5. Save and restart the App Service.
+
+#### 4. Add the GitHub Actions publish profile
+
+The repository includes:
+
+```text
+.github/workflows/azure-backend-deploy.yml
+```
+
+That workflow deploys the `backend` folder to:
+
+```text
+smarthire-ai-backend-numairfahad
+```
+
+To let GitHub deploy to Azure:
+
+1. Open Azure App Service `Overview`.
+2. Click `Download publish profile`.
+3. If the button is disabled, go to `Configuration` > `General settings`, enable `SCM Basic Auth Publishing Credentials`, save, then download the publish profile.
+4. Open GitHub repo > `Settings` > `Secrets and variables` > `Actions`.
+5. Click `New repository secret`.
+6. Name:
 
 ```text
 AZURE_WEBAPP_PUBLISH_PROFILE
 ```
 
-Download the publish profile from the Azure App Service `Overview` page and paste the full XML content into that GitHub secret.
+7. Value: paste the full XML content from the downloaded `.PublishSettings` file.
+8. Save the secret.
 
-Important: in `.github/workflows/azure-backend-deploy.yml`, set `AZURE_WEBAPP_NAME` to the exact Azure App Service name you created.
+Never commit the `.PublishSettings` file. The root `.gitignore` already ignores publish settings files.
 
-After deployment, the backend URL will look like:
+#### 5. Push and deploy backend
 
-```text
-https://smarthire-ai-backend-numair.azurewebsites.net
+From the project root:
+
+```bash
+git add README.md API_DOCUMENTATION.md backend/.env.example backend/.env.azure.example backend/package.json backend/package-lock.json backend/server.js backend/scripts/createAdmin.js .github/workflows/azure-backend-deploy.yml
+git commit -m "Configure Azure backend deployment"
+git push origin main
 ```
 
-Test the deployed backend:
+GitHub Actions should start automatically. You can also run it manually from GitHub:
+
+1. Open the repo on GitHub.
+2. Go to `Actions`.
+3. Select `Deploy Backend to Azure App Service`.
+4. Click `Run workflow`.
+
+#### 6. Test the deployed backend
 
 ```text
-https://smarthire-ai-backend-numair.azurewebsites.net/
-https://smarthire-ai-backend-numair.azurewebsites.net/api/health
+https://smarthire-ai-backend-numairfahad.azurewebsites.net/
+https://smarthire-ai-backend-numairfahad.azurewebsites.net/api/health
 ```
 
-Useful Azure checks:
+Expected health response:
 
-- App Service > `Log stream` for live backend logs
-- App Service > `Deployment Center` for GitHub deployment status
-- App Service > `Configuration` for environment variables
+```json
+{
+  "success": true,
+  "status": "ok",
+  "service": "SmartHire AI API"
+}
+```
+
+#### 7. Create or update the production admin
+
+After Azure app settings include `ADMIN_EMAIL` and `ADMIN_PASSWORD`, run the admin script locally against Atlas:
+
+```bash
+cd backend
+npm run create-admin
+```
+
+This creates the admin if missing, promotes the existing user if present, and updates the admin password when `ADMIN_PASSWORD` is configured.
+
+When `NODE_ENV=production`, the script requires `ADMIN_PASSWORD` and will not use a demo fallback password.
+
+#### 8. Azure troubleshooting checklist
+
+- If GitHub Actions says `No credentials found`, check the `AZURE_WEBAPP_PUBLISH_PROFILE` GitHub secret.
+- If the app opens but API routes fail, check App Service `Log stream`.
+- If MongoDB fails, check `MONGO_URI`, Atlas password, Atlas Network Access, and `DNS_SERVERS`.
+- If Cloudinary upload fails, check the three `CLOUDINARY_*` values.
+- If AI routes use fallback data, check `AI_API_KEY`.
+- If frontend requests are blocked by CORS, add the final Vercel URL to `FRONTEND_URL` and `FRONTEND_URLS`, save, then restart Azure.
+- If notifications do not update live, confirm WebSockets are on and `REACT_APP_SOCKET_URL` points to the Azure backend.
+- If Azure shows a billing warning, stay on Free F1 or the lowest student-friendly plan and monitor Cost Management.
 
 Important realtime note:
 
@@ -401,8 +526,8 @@ Create a second Vercel project for the frontend:
 Add frontend environment variables in Vercel:
 
 ```env
-REACT_APP_API_URL=https://smarthire-ai-backend-numair.azurewebsites.net
-REACT_APP_SOCKET_URL=https://smarthire-ai-backend-numair.azurewebsites.net
+REACT_APP_API_URL=https://smarthire-ai-backend-numairfahad.azurewebsites.net
+REACT_APP_SOCKET_URL=https://smarthire-ai-backend-numairfahad.azurewebsites.net
 ```
 
 After frontend deployment, update the backend Azure App Service `FRONTEND_URL` and `FRONTEND_URLS` application settings to include the live Vercel URL, then restart the Azure App Service.

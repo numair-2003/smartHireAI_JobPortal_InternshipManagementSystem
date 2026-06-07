@@ -13,6 +13,10 @@ const createAdmin = async () => {
   const email = process.env.ADMIN_EMAIL || 'admin@smarthire.ai';
   const password = process.env.ADMIN_PASSWORD || 'admin123';
 
+  if (process.env.NODE_ENV === 'production' && !process.env.ADMIN_PASSWORD) {
+    throw new Error('ADMIN_PASSWORD is required when NODE_ENV=production');
+  }
+
   if (password.length < 6) {
     throw new Error('ADMIN_PASSWORD must be at least 6 characters long');
   }
@@ -20,8 +24,16 @@ const createAdmin = async () => {
   const existing = await User.findOne({ email });
   if (existing) {
     existing.role = 'admin';
+    if (process.env.ADMIN_PASSWORD) {
+      existing.password = password;
+    }
     await existing.save();
-    console.log('Existing user promoted to admin:', email);
+    console.log(
+      process.env.ADMIN_PASSWORD
+        ? 'Existing admin user updated with configured password:'
+        : 'Existing user promoted to admin:',
+      email
+    );
   } else {
     await User.create({
       name: 'Admin',
