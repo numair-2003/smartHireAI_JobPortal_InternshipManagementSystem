@@ -187,10 +187,13 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
 FRONTEND_URL=http://localhost:3000
+FRONTEND_URLS=http://localhost:3000,https://your-frontend.vercel.app
 AI_API_KEY=your_openai_api_key
 ADMIN_EMAIL=admin@smarthire.ai
 ADMIN_PASSWORD=change_this_admin_password
 ```
+
+For Azure App Service production settings, use `backend/.env.azure.example` as a reference and add the values in Azure App Service application settings instead of committing a real `.env` file.
 
 ### Frontend `.env`
 
@@ -198,6 +201,8 @@ ADMIN_PASSWORD=change_this_admin_password
 REACT_APP_API_URL=http://localhost:5000
 REACT_APP_SOCKET_URL=http://localhost:5000
 ```
+
+For production on Vercel, point both values to the deployed Azure backend URL.
 
 Never commit real `.env` files or secret keys to GitHub.
 
@@ -297,76 +302,91 @@ The project is intended to be deployed as two separate projects:
 1. `smarthire-ai-backend`
 2. `smarthire-ai-frontend`
 
-### Backend Deployment on Fly.io
+### Backend Deployment on Azure App Service
 
-The backend should be deployed on Fly.io because it runs as a long-lived Node.js service, which is better for Express and Socket.IO than serverless functions.
+The backend is designed for Azure App Service because it runs as a long-lived Node.js Express server and supports Socket.IO better than serverless-only platforms.
 
-Install and log in to the Fly.io CLI:
+Create the backend app in Azure Portal:
 
-```bash
-fly auth login
+1. Search for `App Services`.
+2. Select `Create` > `Web App`.
+3. Use the Azure for Students subscription.
+4. Create or select a resource group, for example `smarthire-ai-rg`.
+5. Set the app name, for example `smarthire-ai-backend-numair`.
+6. Publish: `Code`.
+7. Runtime stack: `Node 20 LTS`.
+8. Operating System: `Linux`.
+9. Region: choose the closest available region.
+10. Pricing plan: choose the lowest student/free-friendly plan available in your subscription.
+
+Recommended Azure App Service settings:
+
+- Startup command: leave blank or use `npm start`
+- WebSockets: `On`
+- Always On: `On` if the selected plan supports it
+
+Add backend application settings in Azure:
+
+Go to the App Service > `Settings` > `Environment variables` or `Configuration` > `Application settings`, then add:
+
+```env
+NODE_ENV=production
+MONGO_URI=your_mongodb_atlas_uri
+DNS_SERVERS=8.8.8.8,8.8.4.4
+JWT_SECRET=your_secure_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+EMAIL_USER=your_gmail_address
+EMAIL_PASS=your_gmail_app_password
+FRONTEND_URL=https://your-frontend-vercel-url.vercel.app
+FRONTEND_URLS=https://your-frontend-vercel-url.vercel.app,http://localhost:3000
+AI_API_KEY=your_openai_api_key
+SCM_DO_BUILD_DURING_DEPLOYMENT=true
 ```
 
-Create the Fly app from the backend folder:
+Do not add `PORT` manually in Azure. The backend already uses `process.env.PORT || 5000`, and Azure provides the runtime port.
 
-```bash
-cd backend
-fly launch
+Deploying from GitHub:
+
+1. In Azure App Service, open `Deployment Center`.
+2. Choose GitHub as the source.
+3. Select this repository.
+4. If Azure asks for a workflow, use `.github/workflows/azure-backend-deploy.yml`.
+5. In GitHub repository settings, add this secret:
+
+```text
+AZURE_WEBAPP_PUBLISH_PROFILE
 ```
 
-Recommended choices during `fly launch`:
+Download the publish profile from the Azure App Service `Overview` page and paste the full XML content into that GitHub secret.
 
-- App name: `smarthire-ai-backend` or another available name
-- Region: choose the closest region to your users
-- Database: choose `No`, because this project uses MongoDB Atlas
-- Deploy now: choose `No` if you want to set secrets first
-
-Set backend environment variables as Fly secrets:
-
-```bash
-fly secrets set NODE_ENV=production
-fly secrets set MONGO_URI=your_mongodb_atlas_uri
-fly secrets set JWT_SECRET=your_secure_jwt_secret
-fly secrets set CLOUDINARY_CLOUD_NAME=your_cloud_name
-fly secrets set CLOUDINARY_API_KEY=your_cloudinary_api_key
-fly secrets set CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-fly secrets set EMAIL_USER=your_gmail_address
-fly secrets set EMAIL_PASS=your_gmail_app_password
-fly secrets set FRONTEND_URL=https://your-frontend-vercel-url.vercel.app
-fly secrets set AI_API_KEY=your_openai_api_key
-```
-
-Deploy or redeploy the backend:
-
-```bash
-fly deploy
-```
-
-Useful Fly.io commands:
-
-```bash
-fly status
-fly logs
-fly open
-```
+Important: in `.github/workflows/azure-backend-deploy.yml`, set `AZURE_WEBAPP_NAME` to the exact Azure App Service name you created.
 
 After deployment, the backend URL will look like:
 
 ```text
-https://smarthire-ai-backend.fly.dev
+https://smarthire-ai-backend-numair.azurewebsites.net
 ```
 
-Test the deployed backend health endpoint:
+Test the deployed backend:
 
 ```text
-https://smarthire-ai-backend.fly.dev/api/health
+https://smarthire-ai-backend-numair.azurewebsites.net/
+https://smarthire-ai-backend-numair.azurewebsites.net/api/health
 ```
+
+Useful Azure checks:
+
+- App Service > `Log stream` for live backend logs
+- App Service > `Deployment Center` for GitHub deployment status
+- App Service > `Configuration` for environment variables
 
 Important realtime note:
 
-- Fly.io is suitable for this backend because it can keep the Express server running for Socket.IO.
+- Azure App Service can host the Express server used by Socket.IO.
 - Stored notifications work through MongoDB even if a user is offline.
-- Socket.IO live updates require the frontend `REACT_APP_SOCKET_URL` to point to the Fly.io backend URL.
+- Socket.IO live updates require the frontend `REACT_APP_SOCKET_URL` to point to the Azure backend URL.
 
 ### Frontend Deployment on Vercel
 
@@ -381,17 +401,11 @@ Create a second Vercel project for the frontend:
 Add frontend environment variables in Vercel:
 
 ```env
-REACT_APP_API_URL=https://smarthire-ai-backend.fly.dev
-REACT_APP_SOCKET_URL=https://smarthire-ai-backend.fly.dev
+REACT_APP_API_URL=https://smarthire-ai-backend-numair.azurewebsites.net
+REACT_APP_SOCKET_URL=https://smarthire-ai-backend-numair.azurewebsites.net
 ```
 
-After frontend deployment, update the backend Fly.io `FRONTEND_URL` secret to the live frontend URL:
-
-```bash
-cd backend
-fly secrets set FRONTEND_URL=https://your-frontend-vercel-url.vercel.app
-fly deploy
-```
+After frontend deployment, update the backend Azure App Service `FRONTEND_URL` and `FRONTEND_URLS` application settings to include the live Vercel URL, then restart the Azure App Service.
 
 ## Deliverables
 

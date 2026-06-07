@@ -49,7 +49,8 @@ Create `backend/.env` from `backend/.env.example`.
 | `CLOUDINARY_API_SECRET` | Required for uploads | Cloudinary API secret |
 | `EMAIL_USER` | Optional | Gmail address for Nodemailer status emails |
 | `EMAIL_PASS` | Optional | Gmail app password |
-| `FRONTEND_URL` | Yes | Allowed frontend origin, for example `http://localhost:3000` |
+| `FRONTEND_URL` | Yes | Primary allowed frontend origin, for example `http://localhost:3000` locally or the Vercel URL in production |
+| `FRONTEND_URLS` | Recommended | Comma-separated allowed frontend origins, useful for allowing both local and deployed frontend URLs |
 | `AI_API_KEY` | Optional | OpenAI API key. If missing, AI routes use demo fallback responses |
 | `ADMIN_EMAIL` | Optional | Email for `npm run create-admin` |
 | `ADMIN_PASSWORD` | Optional | Password for `npm run create-admin` |
@@ -510,4 +511,8 @@ Change demo credentials before using the app publicly.
 - Use MongoDB Atlas for production database hosting.
 - Use real Cloudinary credentials for resume and profile photo uploads.
 - Use a Gmail app password or another transactional email provider for email.
-- Vercel serverless functions can serve REST API routes, but long-lived Socket.IO/WebSocket realtime should be hosted on a serverful Node.js platform or replaced with a managed realtime provider for production.
+- Azure App Service is the recommended backend host for this project because it can run the Express server as a long-lived Node.js app.
+- In Azure App Service, set the runtime stack to Node 20 LTS and use `npm start` as the startup command.
+- Enable WebSockets in Azure App Service when using Socket.IO realtime notifications.
+- Do not set `PORT` manually in Azure. The backend listens on `process.env.PORT || 5000`, and Azure provides the runtime port.
+- Vercel serverless functions can serve REST API routes, but long-lived Socket.IO/WebSocket realtime should be hosted on a serverful Node.js platform such as Azure App Service or replaced with a managed realtime provider for production.
