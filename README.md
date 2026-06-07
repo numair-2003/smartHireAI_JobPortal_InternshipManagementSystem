@@ -257,8 +257,8 @@ For Azure App Service production settings, use `backend/.env.azure.example` as a
 Production backend URL settings used for this deployment:
 
 ```env
-FRONTEND_URL=https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app
-FRONTEND_URLS=https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,http://localhost:3000
+FRONTEND_URL=https://smart-hire-ai-job-portal-internship.vercel.app
+FRONTEND_URLS=https://smart-hire-ai-job-portal-internship.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app,http://localhost:3000
 ```
 
 ### Frontend `.env`
@@ -434,8 +434,8 @@ CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
-FRONTEND_URL=https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app
-FRONTEND_URLS=https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,http://localhost:3000
+FRONTEND_URL=https://smart-hire-ai-job-portal-internship.vercel.app
+FRONTEND_URLS=https://smart-hire-ai-job-portal-internship.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app,http://localhost:3000
 AI_API_KEY=your_openai_api_key
 ADMIN_EMAIL=admin@smarthire.ai
 ADMIN_PASSWORD=your_strong_admin_password
@@ -558,6 +558,7 @@ When `NODE_ENV=production`, the script requires `ADMIN_PASSWORD` and will not us
 - If Cloudinary upload fails, check the three `CLOUDINARY_*` values.
 - If AI routes use fallback data, check `AI_API_KEY`.
 - If frontend requests are blocked by CORS, add the final Vercel URL to `FRONTEND_URL` and `FRONTEND_URLS`, save, then restart Azure.
+- If Vercel lists multiple production/preview domains, include each domain in `FRONTEND_URLS`. Otherwise login may show `Network Error` even though the backend health URL works.
 - If notifications do not update live, confirm WebSockets are on and `REACT_APP_SOCKET_URL` points to the Azure backend.
 - If Azure shows a billing warning, stay on Free F1 or the lowest student-friendly plan and monitor Cost Management.
 
