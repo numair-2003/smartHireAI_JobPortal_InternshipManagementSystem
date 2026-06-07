@@ -109,6 +109,52 @@ Backend runs on:
 http://localhost:5000
 ```
 
+### MongoDB Atlas DNS Troubleshooting
+
+If the backend fails with a MongoDB Atlas SRV DNS error such as `querySrv ECONNREFUSED`, try these options.
+
+#### Option 1: Use mobile hotspot
+
+This is the easiest. Connect the laptop to a mobile hotspot, then run:
+
+```bash
+ipconfig /flushdns
+npm run dev
+```
+
+If it connects, the Wi-Fi router DNS is the issue.
+
+#### Option 2: Use non-SRV MongoDB URI
+
+This avoids `mongodb+srv` DNS lookup completely. Run this first:
+
+```bash
+nslookup -type=TXT cluster0.ewy6run.mongodb.net 8.8.8.8
+```
+
+Use the output to build the exact `mongodb://...` URI for `backend/.env`.
+
+#### Option 3: Use Cloudflare WARP
+
+Install Cloudflare WARP, turn it on, then run:
+
+```bash
+ipconfig /flushdns
+npm run dev
+```
+
+WARP often fixes DNS routing without disabling IPv6.
+
+#### Option 4: Try with Google DNS directly through PowerShell test
+
+This will not fix Node permanently, but confirms the network:
+
+```bash
+nslookup -type=SRV _mongodb._tcp.cluster0.ewy6run.mongodb.net 1.1.1.1
+```
+
+Recommendation: Option 2. It keeps IPv6 enabled and permanently avoids the SRV DNS issue for this project.
+
 ### 2. Frontend Setup
 
 Open a second terminal:
