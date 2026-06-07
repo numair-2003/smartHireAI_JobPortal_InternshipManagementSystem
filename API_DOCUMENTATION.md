@@ -6,11 +6,11 @@ Backend API for the SmartHire AI job portal and internship management system.
 
 - Local API: `http://localhost:5000/api`
 - Local Socket.IO: `http://localhost:5000`
-- Azure API: `https://smarthire-ai-backend-numairfahad.azurewebsites.net/api`
-- Azure Socket.IO: `https://smarthire-ai-backend-numairfahad.azurewebsites.net`
+- Azure API: `https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api`
+- Azure Socket.IO: `https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net`
 - Root check: `GET http://localhost:5000/`
 - Health check: `GET http://localhost:5000/api/health`
-- Azure health check: `GET https://smarthire-ai-backend-numairfahad.azurewebsites.net/api/health`
+- Azure health check: `GET https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health`
 
 ## Authentication
 
@@ -471,7 +471,7 @@ http://localhost:5000
 Socket URL after Azure backend deployment:
 
 ```text
-https://smarthire-ai-backend-numairfahad.azurewebsites.net
+https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
 ```
 
 Client joins a personal room after login:

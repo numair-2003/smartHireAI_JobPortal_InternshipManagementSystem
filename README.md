@@ -431,6 +431,12 @@ That workflow deploys the `backend` folder to:
 smarthire-ai-backend-numairfahad
 ```
 
+The Azure app name is used by GitHub Actions. The public backend URL is the full default domain:
+
+```text
+https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
+```
+
 To let GitHub deploy to Azure:
 
 1. Open Azure App Service `Overview`.
@@ -469,8 +475,8 @@ GitHub Actions should start automatically. You can also run it manually from Git
 #### 6. Test the deployed backend
 
 ```text
-https://smarthire-ai-backend-numairfahad.azurewebsites.net/
-https://smarthire-ai-backend-numairfahad.azurewebsites.net/api/health
+https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/
+https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health
 ```
 
 Expected health response:
@@ -526,8 +532,8 @@ Create a second Vercel project for the frontend:
 Add frontend environment variables in Vercel:
 
 ```env
-REACT_APP_API_URL=https://smarthire-ai-backend-numairfahad.azurewebsites.net
-REACT_APP_SOCKET_URL=https://smarthire-ai-backend-numairfahad.azurewebsites.net
+REACT_APP_API_URL=https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
+REACT_APP_SOCKET_URL=https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
 ```
 
 After frontend deployment, update the backend Azure App Service `FRONTEND_URL` and `FRONTEND_URLS` application settings to include the live Vercel URL, then restart the Azure App Service.
