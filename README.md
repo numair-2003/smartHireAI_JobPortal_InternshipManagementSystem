@@ -250,6 +250,8 @@ FRONTEND_URLS=http://localhost:3000,https://your-frontend.vercel.app
 AI_API_KEY=your_openai_api_key
 ADMIN_EMAIL=admin@smarthire.ai
 ADMIN_PASSWORD=change_this_admin_password
+SCM_DO_BUILD_DURING_DEPLOYMENT=true
+ENABLE_ORYX_BUILD=true
 ```
 
 For Azure App Service production settings, use `backend/.env.azure.example` as a reference and add the values in Azure App Service application settings instead of committing a real `.env` file.
@@ -440,6 +442,7 @@ AI_API_KEY=your_openai_api_key
 ADMIN_EMAIL=admin@smarthire.ai
 ADMIN_PASSWORD=your_strong_admin_password
 SCM_DO_BUILD_DURING_DEPLOYMENT=true
+ENABLE_ORYX_BUILD=true
 ```
 
 Do not add `PORT` manually in Azure. The backend already uses `process.env.PORT || 5000`, and Azure provides the runtime port.
@@ -449,6 +452,8 @@ Warnings:
 - Do not commit `backend/.env` to GitHub.
 - Do not paste real secrets into README files.
 - Do not add `PORT` in Azure App Service.
+- Keep `SCM_DO_BUILD_DURING_DEPLOYMENT=true` and `ENABLE_ORYX_BUILD=true` so Azure installs backend dependencies during deployment.
+- Do not upload `node_modules` manually to Azure. The GitHub Actions workflow creates a source-only backend ZIP and lets Azure build it.
 - Do not check `Deployment slot setting` unless you are using Azure deployment slots.
 - After changing environment variables, click `Apply` or `Save`, then restart the App Service.
 - Keep WebSockets enabled for live Socket.IO notifications.

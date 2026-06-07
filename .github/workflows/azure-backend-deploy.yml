@@ -12,7 +12,7 @@ on:
 env:
   # Must match the exact Azure App Service app name.
   AZURE_WEBAPP_NAME: smarthire-ai-backend-numairfahad
-  AZURE_WEBAPP_PACKAGE_PATH: backend
+  AZURE_WEBAPP_PACKAGE_PATH: backend-release.zip
   NODE_VERSION: '22.x'
 
 jobs:
@@ -33,6 +33,21 @@ jobs:
       - name: Install backend production dependencies
         working-directory: backend
         run: npm ci --omit=dev
+
+      - name: Create backend deployment package
+        working-directory: backend
+        run: |
+          zip -r ../backend-release.zip \
+            server.js \
+            package.json \
+            package-lock.json \
+            config \
+            controllers \
+            middleware \
+            models \
+            routes \
+            services \
+            utils
 
       - name: Deploy backend to Azure App Service
         uses: azure/webapps-deploy@v3
