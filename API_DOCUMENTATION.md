@@ -511,9 +511,9 @@ After running `npm run seed`:
 | --- | --- | --- |
 | Student | `student@smarthire.ai` | `password123` |
 | Recruiter | `recruiter@smarthire.ai` | `password123` |
-| Admin | `admin@smarthire.ai` | Set with `ADMIN_PASSWORD` and `npm run create-admin` |
+| Admin | `admin@smarthire.ai` | Uses `ADMIN_PASSWORD` if set; otherwise demo fallback `admin123` |
 
-Change demo credentials before using the app publicly. If `admin@smarthire.ai` already exists, `npm run create-admin` promotes that account to admin and updates the password when `ADMIN_PASSWORD` is configured.
+Change demo credentials before using the app publicly. The seed script uses `ADMIN_PASSWORD` for the seeded admin when it is configured. If `admin@smarthire.ai` already exists, `npm run create-admin` promotes that account to admin and updates the password when `ADMIN_PASSWORD` is configured.
 
 When `NODE_ENV=production`, `npm run create-admin` requires `ADMIN_PASSWORD` and will not use a demo fallback password.
 

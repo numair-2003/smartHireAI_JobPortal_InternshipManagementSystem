@@ -7,6 +7,8 @@ const Application = require('../models/Application');
 const Notification = require('../models/Notification');
 
 const demoPassword = 'password123';
+const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+const adminPasswordLabel = process.env.ADMIN_PASSWORD ? '<ADMIN_PASSWORD from backend/.env>' : 'admin123';
 
 const users = [
   {
@@ -28,7 +30,7 @@ const users = [
   {
     name: 'Platform Admin',
     email: 'admin@smarthire.ai',
-    password: 'admin123',
+    password: adminPassword,
     role: 'admin',
   },
   {
@@ -288,7 +290,10 @@ const seed = async () => {
   console.log('Demo data seeded successfully.');
   console.log('Student: student@smarthire.ai / password123');
   console.log('Recruiter: recruiter@smarthire.ai / password123');
-  console.log('Admin: admin@smarthire.ai / admin123');
+  console.log(`Admin: admin@smarthire.ai / ${adminPasswordLabel}`);
+  if (!process.env.ADMIN_PASSWORD) {
+    console.log('Warning: seeded admin is using the demo password. Set ADMIN_PASSWORD before public deployment.');
+  }
   process.exit(0);
 };
 

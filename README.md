@@ -62,6 +62,9 @@ SmartHire AI - Job Portal and Internship Management System/
 |   |-- scripts/
 |   |-- services/
 |   |-- utils/
+|   |-- .env.example
+|   |-- .env.azure.example
+|   |-- .gitignore
 |   |-- package.json
 |   `-- server.js
 |-- frontend/
@@ -73,10 +76,22 @@ SmartHire AI - Job Portal and Internship Management System/
 |   |   |-- pages/
 |   |   |-- services/
 |   |   `-- utils/
+|   |-- .env.example
+|   |-- .gitignore
 |   `-- package.json
+|-- .gitignore
 |-- API_DOCUMENTATION.md
 `-- README.md
 ```
+
+Real local environment files also exist during development:
+
+```text
+backend/.env
+frontend/.env
+```
+
+These files are intentionally ignored by Git and must not be pushed because they contain secrets and deployment-specific URLs.
 
 ## Local Setup
 
@@ -134,6 +149,8 @@ Important notes:
 - Keep the local `mongodb://127.0.0.1:27017` connection if you still want local testing. Atlas and local MongoDB are separate connections in Compass.
 - If Compass cannot connect, check Atlas `Network Access` and make sure your current IP or `0.0.0.0/0` is active.
 - If your Wi-Fi has SRV DNS issues, try Cloudflare WARP or use the non-SRV MongoDB URI option below.
+- Keep `/smarthire-ai` in the URI so Compass opens the same database used by the app.
+- If your database password has special characters such as `@`, `#`, `/`, `?`, or `&`, use the encoded connection string copied from Atlas.
 - Never paste the real Atlas password into GitHub, README, screenshots, or chat.
 
 ### MongoDB Atlas DNS Troubleshooting
@@ -163,14 +180,29 @@ Use the output to build the exact `mongodb://...` URI for `backend/.env`.
 
 #### Option 3: Use Cloudflare WARP
 
-Install Cloudflare WARP, turn it on, then run:
+Use this when Atlas works through Google DNS tests but Node still fails with `querySrv ECONNREFUSED`.
+
+1. Install Cloudflare WARP / 1.1.1.1 for Windows.
+2. Open the Cloudflare app.
+3. Choose `Private browsing` when asked what to use WARP for.
+4. Set mode to `Traffic and DNS (UDP)`.
+5. Turn WARP on and wait until it says `Connected`.
+6. In Command Prompt, run:
 
 ```bash
 ipconfig /flushdns
+nslookup -type=SRV _mongodb._tcp.cluster0.ewy6run.mongodb.net
 npm run dev
 ```
 
-WARP often fixes DNS routing without disabling IPv6.
+WARP often fixes DNS routing without disabling IPv6. In the successful case, `nslookup` may show a Cloudflare/WARP resolver such as `127.0.2.2`, and `npm run dev` should connect to MongoDB Atlas.
+
+Cloudflare WARP notes:
+
+- Keep WARP running while testing Atlas locally if your Wi-Fi router DNS is unreliable.
+- Do not choose `Cloudflare One Client` unless you have a company/team Cloudflare One login.
+- If WARP causes other network issues, disconnect it and use the non-SRV MongoDB URI option instead.
+- WARP is only a local network workaround. Azure App Service uses its own network and still needs the correct `MONGO_URI`, `DNS_SERVERS`, and Atlas Network Access settings.
 
 #### Option 4: Try with Google DNS directly through PowerShell test
 
@@ -222,6 +254,13 @@ ADMIN_PASSWORD=change_this_admin_password
 
 For Azure App Service production settings, use `backend/.env.azure.example` as a reference and add the values in Azure App Service application settings instead of committing a real `.env` file.
 
+Production backend URL settings used for this deployment:
+
+```env
+FRONTEND_URL=https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app
+FRONTEND_URLS=https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,http://localhost:3000
+```
+
 ### Frontend `.env`
 
 ```env
@@ -230,6 +269,13 @@ REACT_APP_SOCKET_URL=http://localhost:5000
 ```
 
 For production on Vercel, point both values to the deployed Azure backend URL.
+
+Production frontend URL settings used for this deployment:
+
+```env
+REACT_APP_API_URL=https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
+REACT_APP_SOCKET_URL=https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
+```
 
 Never commit real `.env` files or secret keys to GitHub.
 
@@ -248,9 +294,11 @@ Demo accounts:
 | --- | --- | --- |
 | Student | `student@smarthire.ai` | `password123` |
 | Recruiter | `recruiter@smarthire.ai` | `password123` |
-| Admin | `admin@smarthire.ai` | Set with `ADMIN_PASSWORD` and `npm run create-admin` |
+| Admin | `admin@smarthire.ai` | Uses `ADMIN_PASSWORD` if set; otherwise demo fallback `admin123` |
 
 The seed script creates demo jobs, applications, AI resume scores, and notifications.
+
+Important: before seeding data for a public/live demo, set a strong `ADMIN_PASSWORD` in `backend/.env`. Otherwise the seed script warns and uses the demo fallback admin password.
 
 For production or Azure testing, set a strong `ADMIN_PASSWORD` in `backend/.env` locally and in Azure App Service application settings, then run:
 
@@ -386,8 +434,8 @@ CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
-FRONTEND_URL=https://your-frontend-vercel-url.vercel.app
-FRONTEND_URLS=https://your-frontend-vercel-url.vercel.app,http://localhost:3000
+FRONTEND_URL=https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app
+FRONTEND_URLS=https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,http://localhost:3000
 AI_API_KEY=your_openai_api_key
 ADMIN_EMAIL=admin@smarthire.ai
 ADMIN_PASSWORD=your_strong_admin_password
