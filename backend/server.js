@@ -30,9 +30,30 @@ const getAllowedOrigins = () => {
 
 const allowedOrigins = getAllowedOrigins();
 
+const isSmartHireVercelOrigin = (origin) => {
+  try {
+    const { protocol, hostname } = new URL(origin);
+
+    if (protocol !== 'https:') return false;
+
+    return (
+      hostname === 'smart-hire-ai-job-portal-internship.vercel.app' ||
+      (hostname.startsWith('smart-hire-ai-job-portal-internship-management-syste-') &&
+        hostname.endsWith('.vercel.app')) ||
+      (hostname.startsWith('smart-hire-ai-job-portal-inter-git-') &&
+        hostname.endsWith('-numair-2003s-projects.vercel.app'))
+    );
+  } catch (error) {
+    return false;
+  }
+};
+
+const isOriginAllowed = (origin) =>
+  !origin || allowedOrigins.includes(origin) || isSmartHireVercelOrigin(origin);
+
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (isOriginAllowed(origin)) {
       return callback(null, true);
     }
     const error = new Error(`CORS policy does not allow origin: ${origin}`);
@@ -44,7 +65,12 @@ const corsOptions = {
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin(origin, callback) {
+      if (isOriginAllowed(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`Socket.IO CORS policy does not allow origin: ${origin}`));
+    },
     methods: ['GET', 'POST'],
     credentials: true,
   },
