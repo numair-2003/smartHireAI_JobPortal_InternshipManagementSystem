@@ -55,7 +55,7 @@ Create `backend/.env` from `backend/.env.example`.
 | `EMAIL_PASS` | Optional | Gmail app password |
 | `FRONTEND_URL` | Yes | Primary allowed frontend origin, for example `http://localhost:3000` locally or the Vercel URL in production |
 | `FRONTEND_URLS` | Recommended | Comma-separated allowed frontend origins, useful for allowing both local and deployed frontend URLs |
-| `AI_API_KEY` | Optional | OpenAI API key. If missing, AI routes use demo fallback responses |
+| `AI_API_KEY` | Optional | OpenAI API key. Add this only on the backend or Azure App Service, never in frontend/Vercel. If missing or blocked by quota/rate/billing limits, AI routes use demo fallback responses |
 | `ADMIN_EMAIL` | Optional | Email for `npm run create-admin` |
 | `ADMIN_PASSWORD` | Optional | Password for `npm run create-admin` |
 | `SCM_DO_BUILD_DURING_DEPLOYMENT` | Azure only | Use `true` when deploying to Azure App Service from GitHub Actions |
@@ -327,7 +327,7 @@ If email sending fails, the API still saves the status update and logs the email
 
 ## AI Routes
 
-AI routes use OpenAI when `AI_API_KEY` is configured. Without it, the backend returns demo fallback responses so local testing still works.
+AI routes use OpenAI when `AI_API_KEY` is configured. Without it, or when OpenAI returns quota/rate/billing errors, the backend returns demo fallback responses so local testing and demo videos still work.
 
 ### Resume Review
 

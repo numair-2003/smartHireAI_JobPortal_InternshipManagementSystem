@@ -79,6 +79,9 @@ SmartHire AI - Job Portal and Internship Management System/
 |   |-- .env.example
 |   |-- .gitignore
 |   `-- package.json
+|-- demo-assets/
+|   |-- profile-photos/
+|   `-- resumes/
 |-- .gitignore
 |-- API_DOCUMENTATION.md
 `-- README.md
@@ -256,6 +259,14 @@ ENABLE_ORYX_BUILD=true
 
 For Azure App Service production settings, use `backend/.env.azure.example` as a reference and add the values in Azure App Service application settings instead of committing a real `.env` file.
 
+OpenAI key note:
+
+- `AI_API_KEY` belongs only in `backend/.env` for local testing and Azure App Service application settings for production.
+- Do not add `AI_API_KEY` to Vercel frontend environment variables.
+- Do not commit a real OpenAI key to GitHub.
+- After rotating or replacing the OpenAI key in Azure, click `Apply` or `Save`, then restart the Azure App Service.
+- If the OpenAI account has no quota or billing credits, SmartHire returns demo fallback AI responses instead of breaking the app.
+
 Production backend URL settings used for this deployment:
 
 ```env
@@ -302,6 +313,41 @@ The seed script creates demo jobs, applications, AI resume scores, and notificat
 
 Important: before seeding data for a public/live demo, set a strong `ADMIN_PASSWORD` in `backend/.env`. Otherwise the seed script warns and uses the demo fallback admin password.
 
+### Demo Resume and Profile Assets
+
+The `demo-assets` folder contains generated demo files used for a polished demo:
+
+```text
+demo-assets/
+|-- profile-photos/
+|   |-- ayesha-khan-profile.png
+|   |-- bilal-ahmed-profile.png
+|   |-- hamza-raza-profile.png
+|   |-- maha-siddiqui-profile.png
+|   `-- sara-malik-profile.png
+`-- resumes/
+    |-- hamza-raza-resume.pdf
+    `-- sara-malik-resume.pdf
+```
+
+The generated resume PDFs are for demo students except `Ayesha Khan` / `student@smarthire.ai`. Profile photos are generated for all non-admin demo users.
+
+After running `npm run seed`, run the demo asset sync command so the seeded database points to real files in your Cloudinary account instead of placeholder/demo URLs:
+
+```bash
+cd backend
+npm run sync-demo-assets
+```
+
+This script uploads the generated resumes and profile photos to Cloudinary, updates user profile photo URLs, updates Sara and Hamza resume URLs, and repairs existing application `resumeUrl` values. If a recruiter clicks `View Resume` and Cloudinary returns `404`, run this script again.
+
+Important notes:
+
+- `backend/.env` must contain working `MONGO_URI` and `CLOUDINARY_*` values before running the sync.
+- Run `npm.cmd run sync-demo-assets` on Windows PowerShell if `npm run sync-demo-assets` is blocked by execution policy.
+- Do not manually use `res.cloudinary.com/demo/...` URLs for seeded resumes because those files may not exist.
+- The script does not upload an admin profile photo.
+
 For production or Azure testing, set a strong `ADMIN_PASSWORD` in `backend/.env` locally and in Azure App Service application settings, then run:
 
 ```bash
@@ -322,6 +368,7 @@ npm run dev
 npm start
 npm run seed
 npm run create-admin
+npm run sync-demo-assets
 ```
 
 ### Frontend
@@ -354,6 +401,7 @@ Before deployment, test these flows locally:
 - Recruiter posts a job
 - Student applies to a job
 - Student and recruiter can upload profile photos
+- Demo resume/profile assets are synced to Cloudinary with `npm run sync-demo-assets`
 - AI resume review returns a score
 - AI job generator returns a job description
 - Recruiter sees new application notification
@@ -561,6 +609,7 @@ When `NODE_ENV=production`, the script requires `ADMIN_PASSWORD` and will not us
 - If the app opens but API routes fail, check App Service `Log stream`.
 - If MongoDB fails, check `MONGO_URI`, Atlas password, Atlas Network Access, and `DNS_SERVERS`.
 - If Cloudinary upload fails, check the three `CLOUDINARY_*` values.
+- If `View Resume` opens a Cloudinary `404`, run `npm run sync-demo-assets` from the backend folder to upload the generated demo PDFs and repair application resume URLs.
 - If AI routes use fallback data, check `AI_API_KEY`.
 - If frontend requests are blocked by CORS, add the final Vercel URL to `FRONTEND_URL` and `FRONTEND_URLS`, save, then restart Azure.
 - If Vercel lists multiple production/preview domains, include each domain in `FRONTEND_URLS`. Otherwise login may show `Network Error` even though the backend health URL works.
