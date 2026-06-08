@@ -17,6 +17,48 @@ const normalizeSkills = (skills = []) => {
   return [];
 };
 
+const isRecoverableAIError = (error) => {
+  const status = error?.status || error?.statusCode;
+  const code = String(error?.code || '').toLowerCase();
+  const message = String(error?.message || '').toLowerCase();
+
+  return (
+    status === 429 ||
+    status === 500 ||
+    status === 502 ||
+    status === 503 ||
+    status === 504 ||
+    code.includes('quota') ||
+    code.includes('rate') ||
+    message.includes('quota') ||
+    message.includes('rate limit') ||
+    message.includes('billing')
+  );
+};
+
+const createFallbackResumeReview = () => ({
+  score: 72,
+  feedback: 'Demo mode: Live AI review is temporarily unavailable, so SmartHire generated a structured sample review.',
+  strengths: ['Clear structure', 'Relevant experience mentioned'],
+  improvements: ['Add measurable achievements', 'Tailor skills to the job'],
+});
+
+const createFallbackJobDescription = ({ title, skills, type, location, company }) => {
+  const skillList = normalizeSkills(skills);
+
+  return {
+    description: `## ${title} at ${company}\n\nWe are hiring a **${title}** (${type}) based in **${location}**.\n\n### Responsibilities\n- Build and improve production-ready features with the team\n- Collaborate with product, design, and engineering stakeholders\n- Write clean, maintainable work that supports real hiring workflows\n- Review requirements, identify gaps, and communicate progress clearly\n\n### Qualifications\n- Strong foundation in ${skillList.join(', ') || 'relevant technologies'}\n- Practical project experience or internship-ready portfolio work\n- Good problem-solving and communication skills\n- Ability to learn quickly and work in a team environment`,
+    requirements: [
+      `Hands-on experience with ${skillList[0] || 'the required stack'}`,
+      'Strong problem-solving and debugging skills',
+      'Good written and verbal communication',
+      'Ability to collaborate with cross-functional teams',
+      'Portfolio, coursework, or equivalent practical experience',
+    ],
+    skills: skillList.length ? skillList : ['Communication', 'Teamwork'],
+  };
+};
+
 const reviewResume = async ({ resumeText, jobTitle, jobSkills = [] }) => {
   const client = getClient();
   const skillList = normalizeSkills(jobSkills);
@@ -29,21 +71,23 @@ Return ONLY valid JSON:
 {"score":0-100,"feedback":"summary","strengths":["..."],"improvements":["..."]}`;
 
   if (!client) {
-    return {
-      score: 72,
-      feedback: 'Demo mode: Configure AI_API_KEY for live AI resume review.',
-      strengths: ['Clear structure', 'Relevant experience mentioned'],
-      improvements: ['Add measurable achievements', 'Tailor skills to the job'],
-    };
+    return createFallbackResumeReview();
   }
 
-  const completion = await client.chat.completions.create({
-    model: 'gpt-4o-mini',
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.4,
-  });
+  try {
+    const completion = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.4,
+    });
 
-  return parseJsonFromText(completion.choices[0].message.content);
+    return parseJsonFromText(completion.choices[0].message.content);
+  } catch (error) {
+    if (isRecoverableAIError(error)) {
+      return createFallbackResumeReview();
+    }
+    throw error;
+  }
 };
 
 const generateJobDescription = async ({ title, skills, type, location, company }) => {
@@ -60,26 +104,23 @@ Return ONLY valid JSON:
 {"description":"full markdown description","requirements":["5 items"],"skills":["parsed skills"]}`;
 
   if (!client) {
-    return {
-      description: `## ${title} at ${company}\n\nWe are hiring a **${title}** (${type}) based in **${location}**.\n\n### Responsibilities\n- Collaborate with cross-functional teams\n- Deliver high-quality work on schedule\n- Contribute to product and process improvements\n\n### Qualifications\n- Strong foundation in ${skillList.join(', ') || 'relevant technologies'}\n- Excellent communication skills\n- Self-motivated team player`,
-      requirements: [
-        `Experience with ${skillList[0] || 'required stack'}`,
-        'Strong problem-solving skills',
-        'Good written and verbal communication',
-        'Ability to work in a team environment',
-        'Bachelor\'s degree or equivalent experience',
-      ],
-      skills: skillList.length ? skillList : ['Communication', 'Teamwork'],
-    };
+    return createFallbackJobDescription({ title, skills, type, location, company });
   }
 
-  const completion = await client.chat.completions.create({
-    model: 'gpt-4o-mini',
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.5,
-  });
+  try {
+    const completion = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.5,
+    });
 
-  return parseJsonFromText(completion.choices[0].message.content);
+    return parseJsonFromText(completion.choices[0].message.content);
+  } catch (error) {
+    if (isRecoverableAIError(error)) {
+      return createFallbackJobDescription({ title, skills, type, location, company });
+    }
+    throw error;
+  }
 };
 
 module.exports = { reviewResume, generateJobDescription };
