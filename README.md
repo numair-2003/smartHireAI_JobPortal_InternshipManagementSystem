@@ -287,6 +287,22 @@ AI provider key note:
 - After rotating or replacing the AI key in Azure, click `Apply` or `Save`, then restart the Azure App Service.
 - If the AI provider has no quota, billing credits, or available free-tier capacity, SmartHire returns demo fallback AI responses instead of breaking the app.
 
+Google Gemini setup:
+
+1. Create the key from [Google AI Studio API Keys](https://aistudio.google.com/app/apikey).
+2. In `backend/.env` locally and Azure App Service environment variables, set:
+
+```env
+AI_PROVIDER=gemini
+AI_MODEL=gemini-2.5-flash
+AI_API_KEY=your_actual_google_gemini_api_key
+```
+
+3. Save/apply Azure environment variables and restart the Azure App Service.
+4. Do not add Gemini keys to Vercel frontend environment variables.
+
+SmartHire calls Gemini through Google's OpenAI-compatible endpoint, documented here: [Gemini OpenAI compatibility](https://ai.google.dev/gemini-api/docs/openai).
+
 Production backend URL settings used for this deployment:
 
 ```env

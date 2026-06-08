@@ -60,7 +60,7 @@ Create `backend/.env` from `backend/.env.example`.
 | `FRONTEND_URL` | Yes | Primary allowed frontend origin, for example [http://localhost:3000](http://localhost:3000) locally or the Vercel URL in production |
 | `FRONTEND_URLS` | Recommended | Comma-separated allowed frontend origins, useful for allowing both local and deployed frontend URLs |
 | `AI_PROVIDER` | Optional | AI provider name. Use `gemini` for Google Gemini or `openai` for OpenAI. Gemini is auto-detected when the key starts with `AIza`, but setting this explicitly is recommended |
-| `AI_MODEL` | Optional | AI model name. Use `gemini-2.0-flash` for Gemini demos or `gpt-4o-mini` for OpenAI |
+| `AI_MODEL` | Optional | AI model name. Use `gemini-2.5-flash` for Gemini demos or `gpt-4o-mini` for OpenAI |
 | `AI_API_KEY` | Optional | Gemini or OpenAI API key. Add this only on the backend or Azure App Service, never in frontend/Vercel. If missing or blocked by quota/rate/billing limits, AI routes use demo fallback responses |
 | `AI_BASE_URL` | Optional | Custom OpenAI-compatible base URL. Usually leave empty; Gemini uses `https://generativelanguage.googleapis.com/v1beta/openai/` automatically |
 | `ADMIN_EMAIL` | Optional | Email for `npm run create-admin` |
@@ -353,7 +353,17 @@ If email sending fails, the API still saves the status update and logs the email
 
 ## AI Routes
 
-AI routes use Google Gemini or OpenAI when `AI_API_KEY` is configured. With `AI_PROVIDER=gemini`, the backend calls Gemini through Google's OpenAI-compatible endpoint using `AI_MODEL=gemini-2.0-flash`. Without a key, or when the provider returns quota/rate/billing errors, the backend returns demo fallback responses so local testing and demo videos still work.
+AI routes use Google Gemini or OpenAI when `AI_API_KEY` is configured. With `AI_PROVIDER=gemini`, the backend calls Gemini through Google's OpenAI-compatible endpoint using `AI_MODEL=gemini-2.5-flash`. Without a key, or when the provider returns quota/rate/billing errors, the backend returns demo fallback responses so local testing and demo videos still work.
+
+Recommended Gemini settings:
+
+```env
+AI_PROVIDER=gemini
+AI_MODEL=gemini-2.5-flash
+AI_API_KEY=your_actual_google_gemini_api_key
+```
+
+Create Gemini keys from [Google AI Studio API Keys](https://aistudio.google.com/app/apikey). Add the key only to `backend/.env` locally and Azure App Service environment variables in production. Do not add AI provider keys to Vercel frontend environment variables. Gemini OpenAI-compatible usage is documented here: [Gemini OpenAI compatibility](https://ai.google.dev/gemini-api/docs/openai).
 
 ### Resume Review
 

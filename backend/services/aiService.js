@@ -4,6 +4,7 @@ const geminiBaseUrl = 'https://generativelanguage.googleapis.com/v1beta/openai/'
 
 const getProvider = () => {
   const configuredProvider = String(process.env.AI_PROVIDER || '').trim().toLowerCase();
+  if (['gemini', 'google', 'google-gemini'].includes(configuredProvider)) return 'gemini';
   if (configuredProvider) return configuredProvider;
 
   // Gemini API keys usually start with AIza. This keeps existing AI_API_KEY setup working.
@@ -48,6 +49,8 @@ const isRecoverableAIError = (error) => {
 
   return (
     status === 429 ||
+    status === 401 ||
+    status === 403 ||
     status === 500 ||
     status === 502 ||
     status === 503 ||
@@ -56,7 +59,11 @@ const isRecoverableAIError = (error) => {
     code.includes('rate') ||
     message.includes('quota') ||
     message.includes('rate limit') ||
-    message.includes('billing')
+    message.includes('billing') ||
+    message.includes('api key') ||
+    message.includes('unauthorized') ||
+    message.includes('forbidden') ||
+    message.includes('permission')
   );
 };
 
