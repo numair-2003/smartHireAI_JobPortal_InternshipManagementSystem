@@ -14,6 +14,7 @@ SmartHire AI is a full-stack MERN job portal for students, recruiters, and admin
 | Backend Health Check | [Azure backend health](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health) |
 | Backend API Base | [Azure API base](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api) |
 | API Documentation | [API_DOCUMENTATION.md](API_DOCUMENTATION.md) |
+| Demo Video | [Demo_Video_SmartHireAI.mp4](demo-assets/videos/Demo_Video_SmartHireAI.mp4) |
 | MongoDB Atlas | [MongoDB Atlas](https://cloud.mongodb.com/) |
 | MongoDB Compass | [MongoDB Compass Download](https://www.mongodb.com/try/download/compass) |
 | Cloudinary Console | [Cloudinary Console](https://console.cloudinary.com/) |
@@ -101,7 +102,8 @@ SmartHire AI - Job Portal and Internship Management System/
 |   `-- package.json
 |-- demo-assets/
 |   |-- profile-photos/
-|   `-- resumes/
+|   |-- resumes/
+|   `-- videos/
 |-- .gitignore
 |-- API_DOCUMENTATION.md
 `-- README.md
@@ -401,18 +403,22 @@ demo-assets/
 |   |-- priya-nair-profile.png
 |   |-- sara-malik-profile.png
 |   `-- sofia-garcia-profile.png
-`-- resumes/
-    |-- ayesha-khan-resume.pdf
-    |-- emma-johnson-resume.pdf
-    |-- hamza-raza-resume.pdf
-    |-- lucas-meyer-resume.pdf
-    |-- mei-chen-resume.pdf
-    |-- omar-hassan-resume.pdf
-    |-- sara-malik-resume.pdf
-    `-- sofia-garcia-resume.pdf
+|-- resumes/
+|   |-- ayesha-khan-resume.pdf
+|   |-- emma-johnson-resume.pdf
+|   |-- hamza-raza-resume.pdf
+|   |-- lucas-meyer-resume.pdf
+|   |-- mei-chen-resume.pdf
+|   |-- omar-hassan-resume.pdf
+|   |-- sara-malik-resume.pdf
+|   `-- sofia-garcia-resume.pdf
+`-- videos/
+    `-- Demo_Video_SmartHireAI.mp4
 ```
 
 The same asset inventory is also listed in [demo-assets/README.txt](demo-assets/README.txt).
+
+The demo video is stored with [Git LFS](https://git-lfs.com/) because it is larger than GitHub's normal 100 MB file limit. Make sure `.gitattributes` is committed with the video.
 
 The generated resume PDFs cover all seeded demo students: `Ayesha Khan`, `Sara Malik`, `Hamza Raza`, `Emma Johnson`, `Lucas Meyer`, `Sofia Garcia`, `Omar Hassan`, and `Mei Chen`.
 

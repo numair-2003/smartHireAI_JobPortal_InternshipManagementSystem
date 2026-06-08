@@ -26,4 +26,9 @@ Profile PNGs generated for everyone except admins:
 - profile-photos/sara-malik-profile.png
 - profile-photos/sofia-garcia-profile.png
 
+Demo video:
+- videos/Demo_Video_SmartHireAI.mp4
+
+The demo video is tracked with Git LFS because it is larger than GitHub's normal 100 MB file limit.
+
 Run backend/npm run sync-demo-assets after seeding so Cloudinary stores these files and MongoDB application records point to working resume URLs.
