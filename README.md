@@ -466,7 +466,7 @@ npm run build
 
 ## Brightness Preferences
 
-The navbar includes a brightness settings button for all visitors and logged-in roles, including students, recruiters, and admins.
+The navbar includes a visible brightness settings icon button for all visitors and logged-in roles, including students, recruiters, and admins. On desktop it appears beside `Jobs` before the notification bell; on mobile it appears inside the opened navigation menu.
 
 Available settings:
 

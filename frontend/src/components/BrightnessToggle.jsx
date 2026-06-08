@@ -73,10 +73,11 @@ const BrightnessToggle = ({ onSelect }) => {
     <div ref={panelRef} className="relative">
       <button
         type="button"
-        className="btn-ghost h-10 w-10 px-0"
+        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700 shadow-sm transition hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         onClick={() => setOpen((current) => !current)}
         aria-label="Brightness settings"
         aria-expanded={open}
+        title="Brightness settings"
       >
         <Icon name={selectedMode.icon} className="h-5 w-5" />
       </button>
