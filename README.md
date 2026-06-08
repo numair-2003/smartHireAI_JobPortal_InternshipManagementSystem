@@ -352,6 +352,13 @@ Demo accounts:
 
 The seed script creates demo jobs, applications, AI resume scores, and notifications. Demo jobs include Pakistan-based roles plus international roles in London, Dubai, Berlin, San Francisco, Austin, Singapore, Amsterdam, and Toronto.
 
+Current demo seed totals:
+
+- 14 users: 8 students, 5 recruiters, and 1 admin
+- 13 active jobs
+- 12 sample applications
+- Stored notifications for students, recruiters, and admin
+
 Important: before seeding data for a public/live demo, set a strong `ADMIN_PASSWORD` in `backend/.env`. Otherwise the seed script warns and uses the demo fallback admin password.
 
 ### Demo Resume and Profile Assets
@@ -390,8 +397,37 @@ Important notes:
 - Do not manually use `res.cloudinary.com/demo/...` URLs for seeded resumes because those files may not exist.
 - The app opens resumes through protected backend API routes instead of direct browser links to Cloudinary. This keeps the demo usable for logged-in students and recruiters.
 - The Azure backend deployment bundles the generated demo resume PDFs, so seeded resumes can still open even when Cloudinary blocks public PDF delivery.
-- If a direct Cloudinary PDF URL returns `401`, open Cloudinary Console settings and enable public delivery for PDF/ZIP files. Without that account-level setting, uploaded PDF/Word files can exist but Cloudinary may still block browser access.
+- If a direct Cloudinary PDF URL returns `401`, open Cloudinary Console settings and enable public delivery for PDF/ZIP files. Without that account-level setting, uploaded PDF/Word files can exist but Cloudinary may still block browser access. After enabling it, re-run `npm run sync-demo-assets` if old demo URLs still fail.
 - The script does not upload an admin profile photo.
+
+### Seed Resume URL Validation Fix
+
+The `Application` model requires every application record to include `resumeUrl`. If `npm run seed` fails with this error:
+
+```text
+Application validation failed: resumeUrl: Path `resumeUrl` is required.
+```
+
+it means at least one seeded demo application was created for a student that did not have a resume URL attached.
+
+Fix checklist:
+
+1. Confirm `backend/scripts/seedDemoData.js` assigns `resumeUrl` to every seeded student used in `Application.insertMany`.
+2. Confirm each inserted application also includes `resumeUrl: student.resumeUrl`.
+3. Re-run the seed command:
+
+```bash
+cd backend
+npm run seed
+```
+
+4. If resume links need to be repaired in Cloudinary after seeding, run:
+
+```bash
+npm run sync-demo-assets
+```
+
+This project already includes that fix: the extra global demo students reuse bundled demo resume files so the seed script can create valid application records every time.
 
 For production or Azure testing, set a strong `ADMIN_PASSWORD` in `backend/.env` locally and in Azure App Service application settings, then run:
 
@@ -658,6 +694,7 @@ When `NODE_ENV=production`, the script requires `ADMIN_PASSWORD` and will not us
 - If the app opens but API routes fail, check App Service `Log stream`.
 - If MongoDB fails, check `MONGO_URI`, Atlas password, Atlas Network Access, and `DNS_SERVERS`.
 - If Cloudinary upload fails, check the three `CLOUDINARY_*` values.
+- If `npm run seed` fails with `resumeUrl: Path resumeUrl is required`, make sure the latest `backend/scripts/seedDemoData.js` is deployed/pulled, then re-run `npm run seed`.
 - If `View Resume` opens a Cloudinary `404`, run `npm run sync-demo-assets` from the backend folder to upload the generated demo PDFs and repair application resume URLs.
 - If `View Resume` still cannot open resumes after deployment, confirm the latest backend deploy included `demo-assets/resumes` and the latest frontend deploy is using the protected resume buttons.
 - If a direct Cloudinary resume URL opens a `401`, enable PDF/ZIP delivery in Cloudinary account security settings. Direct Cloudinary PDF URLs can be blocked even when the app upload succeeds.

@@ -61,8 +61,9 @@ Create `backend/.env` from `backend/.env.example`.
 | `FRONTEND_URLS` | Recommended | Comma-separated allowed frontend origins, useful for allowing both local and deployed frontend URLs |
 | `AI_API_KEY` | Optional | OpenAI API key. Add this only on the backend or Azure App Service, never in frontend/Vercel. If missing or blocked by quota/rate/billing limits, AI routes use demo fallback responses |
 | `ADMIN_EMAIL` | Optional | Email for `npm run create-admin` |
-| `ADMIN_PASSWORD` | Optional | Password for `npm run create-admin` |
+| `ADMIN_PASSWORD` | Required for production admin setup | Password for `npm run create-admin`. In production, the script refuses to use the demo fallback password |
 | `SCM_DO_BUILD_DURING_DEPLOYMENT` | Azure only | Use `true` when deploying to Azure App Service from GitHub Actions |
+| `ENABLE_ORYX_BUILD` | Azure only | Use `true` so Azure/Oryx installs backend dependencies during deployment |
 
 Frontend-only variables such as `REACT_APP_API_URL` and `REACT_APP_SOCKET_URL` belong in the frontend environment, not in `backend/.env`.
 
@@ -75,12 +76,14 @@ npm run dev
 npm start
 npm run seed
 npm run create-admin
+npm run sync-demo-assets
 ```
 
 - `npm run dev`: starts the API with Nodemon.
 - `npm start`: starts the API with Node.
 - `npm run seed`: creates demo students, recruiters, jobs, applications, and notifications.
 - `npm run create-admin`: creates or promotes an admin user using `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
+- `npm run sync-demo-assets`: uploads generated demo profile photos/resumes to Cloudinary and repairs seeded resume/profile URLs.
 
 ## Auth Routes
 
@@ -434,22 +437,24 @@ Returns:
 
 ```json
 {
-  "users": 6,
-  "jobs": 5,
-  "applications": 4,
-  "students": 3,
-  "recruiters": 2,
+  "users": 14,
+  "jobs": 13,
+  "applications": 12,
+  "students": 8,
+  "recruiters": 5,
   "admins": 1,
-  "activeUsers": 6,
-  "activeJobs": 5,
+  "activeUsers": 14,
+  "activeJobs": 13,
   "applicationsByStatus": {
-    "pending": 1,
-    "reviewed": 1,
-    "shortlisted": 1,
-    "accepted": 1
+    "pending": 4,
+    "reviewed": 3,
+    "shortlisted": 3,
+    "accepted": 2
   }
 }
 ```
+
+These counts match the current demo seed after running `npm run seed`. They can change when users register, recruiters post jobs, or students apply.
 
 ### List Users
 
@@ -545,6 +550,26 @@ The seed script also creates international demo listings in London, Dubai, Berli
 Change demo credentials before using the app publicly. The seed script uses `ADMIN_PASSWORD` for the seeded admin when it is configured. If `admin@smarthire.ai` already exists, `npm run create-admin` promotes that account to admin and updates the password when `ADMIN_PASSWORD` is configured.
 
 When `NODE_ENV=production`, `npm run create-admin` requires `ADMIN_PASSWORD` and will not use a demo fallback password.
+
+### Demo Seed Resume URL Fix
+
+The `Application` schema requires `resumeUrl`, so every seeded application must include a valid resume URL.
+
+If seeding fails with:
+
+```text
+Application validation failed: resumeUrl: Path `resumeUrl` is required.
+```
+
+make sure the latest `backend/scripts/seedDemoData.js` is pulled/deployed. The fixed seed script assigns bundled demo resume URLs to all seeded students and includes `resumeUrl: student.resumeUrl` on every seeded application.
+
+After pulling the fix, run:
+
+```bash
+cd backend
+npm run seed
+npm run sync-demo-assets
+```
 
 ## Deployment Notes
 
