@@ -19,6 +19,7 @@ SmartHire AI is a full-stack MERN job portal for students, recruiters, and admin
 | AI Job Generator | Generates job descriptions, requirements, skill tags, and publishes generated listings |
 | Resume Upload | Cloudinary-backed PDF/DOC/DOCX upload |
 | Profile Photo Upload | Cloudinary-backed JPG/PNG/WEBP avatars for students and recruiters |
+| Brightness Preferences | Navbar brightness selector with Bright, Soft, Night, and intensity settings |
 | Notifications | Socket.IO notification flow plus stored notification history |
 | Email Alerts | Nodemailer email updates when application status changes |
 | Demo Data | Seed script with realistic users, jobs, applications, AI scores, and notifications |
@@ -33,6 +34,7 @@ SmartHire AI is a full-stack MERN job portal for students, recruiters, and admin
 - React Router
 - Axios
 - Socket.IO Client
+- Browser localStorage for brightness preferences
 - React Hot Toast
 
 **Backend**
@@ -382,6 +384,19 @@ npm start
 npm run build
 ```
 
+## Brightness Preferences
+
+The navbar includes a brightness settings button for all visitors and logged-in roles, including students, recruiters, and admins.
+
+Available settings:
+
+- `Bright`: default high-visibility mode.
+- `Soft`: slightly reduced brightness for long browsing sessions.
+- `Night`: dimmer mode using the moon icon.
+- `Intensity`: slider from `70%` to `115%`.
+
+The selected brightness mode is saved in browser `localStorage` under `smarthire-brightness`, so the preference stays active after refreshes and across role logins on the same browser.
+
 ## How Notifications Work
 
 1. The frontend connects to Socket.IO after login.
@@ -412,6 +427,7 @@ Before deployment, test these flows locally:
 - Recruiter updates application status
 - Student sees status notification
 - Admin can view users and platform stats
+- Student, recruiter, and admin can adjust the navbar brightness setting
 - Frontend builds successfully with `npm run build`
 
 Current local verification completed:

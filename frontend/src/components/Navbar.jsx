@@ -8,6 +8,7 @@ import { getDashboardPath } from '../utils/getDashboardPath';
 import NotificationBell from './NotificationBell';
 import Icon from './Icon';
 import UserAvatar from './UserAvatar';
+import BrightnessToggle from './BrightnessToggle';
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
@@ -39,6 +40,7 @@ const Navbar = () => {
 
         <div className="hidden items-center gap-2 md:flex">
           <Link to="/jobs" className="nav-link">Jobs</Link>
+          <BrightnessToggle />
           {user ? (
             <>
               <NotificationBell />
@@ -75,7 +77,10 @@ const Navbar = () => {
       {open && (
         <div className="border-t border-slate-200 bg-white md:hidden">
           <div className="container-page flex flex-col gap-2 py-4">
-            <Link to="/jobs" onClick={closeMenu} className="nav-link">Jobs</Link>
+            <div className="flex items-center justify-between gap-3">
+              <Link to="/jobs" onClick={closeMenu} className="nav-link">Jobs</Link>
+              <BrightnessToggle onSelect={closeMenu} />
+            </div>
             {user ? (
               <>
                 <div className="self-end">
