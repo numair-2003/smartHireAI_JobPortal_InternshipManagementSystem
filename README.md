@@ -9,7 +9,7 @@ SmartHire AI is a full-stack MERN job portal for students, recruiters, and admin
 | Resource | Link |
 | --- | --- |
 | GitHub Repository | [numair-2003/smartHireAI_JobPortal_InternshipManagementSystem](https://github.com/numair-2003/smartHireAI_JobPortal_InternshipManagementSystem) |
-| Live Frontend | [SmartHire AI on Vercel](https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app) |
+| Live Frontend | [SmartHire AI on Vercel](https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app) |
 | Backend Root Check | [Azure backend root](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/) |
 | Backend Health Check | [Azure backend health](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health) |
 | Backend API Base | [Azure API base](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api) |
@@ -306,17 +306,17 @@ SmartHire calls Gemini through Google's OpenAI-compatible endpoint, documented h
 Production backend URL settings used for this deployment:
 
 ```env
-FRONTEND_URL=https://smart-hire-ai-job-portal-internship.vercel.app
-FRONTEND_URLS=https://smart-hire-ai-job-portal-internship.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-b60023dlz.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app,http://localhost:3000
+FRONTEND_URL=https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app
+FRONTEND_URLS=https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app,https://smart-hire-ai-job-portal-internship.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-b60023dlz.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,http://localhost:3000
 ```
 
 Clickable frontend origins referenced above:
 
+- [Current Vercel frontend deployment / Git preview](https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app)
 - [Primary frontend alias](https://smart-hire-ai-job-portal-internship.vercel.app)
-- [Current Vercel frontend deployment](https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app)
+- [Vercel frontend deployment variant](https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app)
 - [Vercel frontend deployment variant](https://smart-hire-ai-job-portal-internship-management-syste-b60023dlz.vercel.app)
 - [Vercel frontend deployment variant](https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app)
-- [Vercel Git preview deployment](https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app)
 - [Local frontend](http://localhost:3000)
 
 ### Frontend `.env`
@@ -610,8 +610,8 @@ CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
-FRONTEND_URL=https://smart-hire-ai-job-portal-internship.vercel.app
-FRONTEND_URLS=https://smart-hire-ai-job-portal-internship.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-b60023dlz.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app,http://localhost:3000
+FRONTEND_URL=https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app
+FRONTEND_URLS=https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app,https://smart-hire-ai-job-portal-internship.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-b60023dlz.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,http://localhost:3000
 AI_PROVIDER=gemini
 AI_MODEL=gemini-2.5-flash
 AI_API_KEY=your_google_gemini_or_openai_api_key

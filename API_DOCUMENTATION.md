@@ -13,7 +13,7 @@ Backend API for the SmartHire AI job portal and internship management system.
 | Local root check | [GET http://localhost:5000/](http://localhost:5000/) |
 | Local health check | [GET http://localhost:5000/api/health](http://localhost:5000/api/health) |
 | Azure health check | [GET https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health) |
-| Live frontend | [SmartHire AI on Vercel](https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app) |
+| Live frontend | [SmartHire AI on Vercel](https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app) |
 | GitHub repository | [numair-2003/smartHireAI_JobPortal_InternshipManagementSystem](https://github.com/numair-2003/smartHireAI_JobPortal_InternshipManagementSystem) |
 
 ## Authentication
