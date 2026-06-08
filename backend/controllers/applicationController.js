@@ -1,4 +1,7 @@
 const asyncHandler = require('express-async-handler');
+const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 const Application = require('../models/Application');
 const Job = require('../models/Job');
 const User = require('../models/User');
@@ -8,6 +11,104 @@ const uploadToCloudinary = require('../utils/uploadToCloudinary');
 const { reviewResume } = require('../services/aiService');
 
 const allowedStatuses = ['pending', 'reviewed', 'shortlisted', 'rejected', 'accepted'];
+
+const allowedResumeExtensions = new Set(['.pdf', '.doc', '.docx']);
+
+const buildResumePublicId = (file) => {
+  const ext = path.extname(file.originalname || '').toLowerCase();
+  const safeExt = allowedResumeExtensions.has(ext) ? ext : '';
+  return `resume-${Date.now()}-${crypto.randomBytes(8).toString('hex')}${safeExt}`;
+};
+
+const uploadResumeFile = (file) =>
+  uploadToCloudinary(file.buffer, {
+    folder: 'smarthire/resumes',
+    public_id: buildResumePublicId(file),
+    resource_type: 'raw',
+    overwrite: false,
+  });
+
+const getResumeFileName = (source) => {
+  if (!source) return '';
+
+  try {
+    const parsed = source.startsWith('http') ? new URL(source).pathname : source;
+    const fileName = decodeURIComponent(parsed.split(/[\\/]/).pop() || '');
+    return allowedResumeExtensions.has(path.extname(fileName).toLowerCase()) ? fileName : '';
+  } catch {
+    const fileName = source.split(/[\\/]/).pop() || '';
+    return allowedResumeExtensions.has(path.extname(fileName).toLowerCase()) ? fileName : '';
+  }
+};
+
+const getContentType = (fileName) => {
+  const ext = path.extname(fileName).toLowerCase();
+  if (ext === '.pdf') return 'application/pdf';
+  if (ext === '.doc') return 'application/msword';
+  if (ext === '.docx') return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+  return 'application/octet-stream';
+};
+
+const findLocalDemoResume = (fileName) => {
+  if (!fileName) return '';
+
+  const resumeDirs = [
+    path.join(__dirname, '..', 'demo-assets', 'resumes'),
+    path.join(__dirname, '..', '..', 'demo-assets', 'resumes'),
+  ];
+
+  return resumeDirs
+    .map((dir) => path.join(dir, fileName))
+    .find((filePath) => fs.existsSync(filePath)) || '';
+};
+
+const isCloudinaryUrl = (url) => {
+  try {
+    return new URL(url).hostname === 'res.cloudinary.com';
+  } catch {
+    return false;
+  }
+};
+
+const sendResumeFile = async ({ res, resumeUrl, resumePublicId }) => {
+  if (!resumeUrl) {
+    res.status(404);
+    throw new Error('Resume not found');
+  }
+
+  const fileName = getResumeFileName(resumePublicId) || getResumeFileName(resumeUrl) || 'resume.pdf';
+  const safeFileName = fileName.replace(/["\r\n]/g, '');
+  const localDemoResume = findLocalDemoResume(fileName);
+
+  if (localDemoResume) {
+    return res.sendFile(localDemoResume, {
+      headers: {
+        'Content-Type': getContentType(fileName),
+        'Content-Disposition': `inline; filename="${safeFileName}"`,
+      },
+    });
+  }
+
+  if (!isCloudinaryUrl(resumeUrl)) {
+    res.status(400);
+    throw new Error('Resume URL is not supported');
+  }
+
+  const cloudinaryResponse = await fetch(resumeUrl);
+  if (!cloudinaryResponse.ok) {
+    res.status(cloudinaryResponse.status === 401 ? 409 : cloudinaryResponse.status);
+    throw new Error(
+      cloudinaryResponse.status === 401
+        ? 'Cloudinary is blocking PDF/Word resume delivery. Enable PDF/ZIP delivery in Cloudinary Security settings.'
+        : 'Resume file could not be loaded from Cloudinary'
+    );
+  }
+
+  const buffer = Buffer.from(await cloudinaryResponse.arrayBuffer());
+  res.setHeader('Content-Type', cloudinaryResponse.headers.get('content-type') || getContentType(fileName));
+  res.setHeader('Content-Disposition', `inline; filename="${safeFileName}"`);
+  return res.send(buffer);
+};
 
 // @desc    Apply to job
 // @route   POST /api/applications
@@ -29,10 +130,7 @@ const applyToJob = asyncHandler(async (req, res) => {
   let resumeUrl = req.user.resumeUrl;
 
   if (req.file) {
-    const uploaded = await uploadToCloudinary(req.file.buffer, {
-      folder: 'smarthire/resumes',
-      resource_type: 'raw',
-    });
+    const uploaded = await uploadResumeFile(req.file);
     resumeUrl = uploaded.secure_url;
     await User.findByIdAndUpdate(req.user._id, {
       resumeUrl: uploaded.secure_url,
@@ -171,10 +269,7 @@ const uploadResume = asyncHandler(async (req, res) => {
     throw new Error('No file uploaded');
   }
 
-  const uploaded = await uploadToCloudinary(req.file.buffer, {
-    folder: 'smarthire/resumes',
-    resource_type: 'raw',
-  });
+  const uploaded = await uploadResumeFile(req.file);
   const user = await User.findByIdAndUpdate(
     req.user._id,
     { resumeUrl: uploaded.secure_url, resumePublicId: uploaded.public_id },
@@ -184,10 +279,54 @@ const uploadResume = asyncHandler(async (req, res) => {
   res.json({ resumeUrl: user.resumeUrl, message: 'Resume uploaded' });
 });
 
+// @desc    View current student's resume through the API
+// @route   GET /api/applications/resume/current
+const getCurrentResume = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select('resumeUrl resumePublicId');
+  await sendResumeFile({
+    res,
+    resumeUrl: user?.resumeUrl,
+    resumePublicId: user?.resumePublicId,
+  });
+});
+
+// @desc    View an application resume through the API
+// @route   GET /api/applications/:id/resume
+const getApplicationResume = asyncHandler(async (req, res) => {
+  const application = await Application.findById(req.params.id)
+    .populate('job', 'postedBy')
+    .populate('student', 'resumeUrl resumePublicId');
+
+  if (!application) {
+    res.status(404);
+    throw new Error('Application not found');
+  }
+
+  const isStudentOwner =
+    req.user.role === 'student' &&
+    application.student?._id?.toString() === req.user._id.toString();
+  const isRecruiterOwner =
+    req.user.role === 'recruiter' &&
+    application.job?.postedBy?.toString() === req.user._id.toString();
+
+  if (!isStudentOwner && !isRecruiterOwner && req.user.role !== 'admin') {
+    res.status(403);
+    throw new Error('Not authorized to view this resume');
+  }
+
+  await sendResumeFile({
+    res,
+    resumeUrl: application.resumeUrl || application.student?.resumeUrl,
+    resumePublicId: application.student?.resumePublicId,
+  });
+});
+
 module.exports = {
   applyToJob,
   getMyApplications,
   getJobApplications,
   updateApplicationStatus,
   uploadResume,
+  getCurrentResume,
+  getApplicationResume,
 };

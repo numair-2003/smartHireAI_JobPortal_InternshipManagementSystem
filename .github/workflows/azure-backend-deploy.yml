@@ -7,6 +7,7 @@ on:
       - main
     paths:
       - 'backend/**'
+      - 'demo-assets/**'
       - '.github/workflows/azure-backend-deploy.yml'
 
 env:
@@ -34,6 +35,11 @@ jobs:
         working-directory: backend
         run: npm ci --omit=dev
 
+      - name: Copy demo resume assets
+        run: |
+          mkdir -p backend/demo-assets/resumes
+          cp -r demo-assets/resumes/. backend/demo-assets/resumes/
+
       - name: Create backend deployment package
         working-directory: backend
         run: |
@@ -47,7 +53,8 @@ jobs:
             models \
             routes \
             services \
-            utils
+            utils \
+            demo-assets
 
       - name: Deploy backend to Azure App Service
         uses: azure/webapps-deploy@v3

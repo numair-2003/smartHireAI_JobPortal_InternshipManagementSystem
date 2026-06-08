@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyApplications } from '../features/applicationSlice';
@@ -18,6 +18,7 @@ const StudentDashboard = () => {
   const { myApplications } = useSelector((state) => state.applications);
   const statusCounts = countByStatus(myApplications);
   const score = averageScore(myApplications);
+  const [openingResume, setOpeningResume] = useState(false);
 
   useEffect(() => {
     dispatch(fetchMyApplications());
@@ -36,6 +37,36 @@ const StudentDashboard = () => {
       toast.success('Resume uploaded to profile');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Upload failed');
+    }
+  };
+
+  const readResumeError = async (err) => {
+    const data = err.response?.data;
+    if (data instanceof Blob) {
+      try {
+        const parsed = JSON.parse(await data.text());
+        return parsed.message;
+      } catch {
+        return '';
+      }
+    }
+    return err.response?.data?.message;
+  };
+
+  const handleViewResume = async () => {
+    setOpeningResume(true);
+    const resumeWindow = window.open('', '_blank');
+    try {
+      const { data } = await api.get('/applications/resume/current', { responseType: 'blob' });
+      const url = URL.createObjectURL(data);
+      if (resumeWindow) resumeWindow.location.href = url;
+      else window.open(url, '_blank', 'noopener,noreferrer');
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch (err) {
+      if (resumeWindow) resumeWindow.close();
+      toast.error((await readResumeError(err)) || 'Resume could not be opened');
+    } finally {
+      setOpeningResume(false);
     }
   };
 
@@ -81,9 +112,9 @@ const StudentDashboard = () => {
               <input type="file" accept=".pdf,.doc,.docx" onChange={handleResumeUpload} className="input-field" />
             </label>
             {user?.resumeUrl ? (
-              <a href={user.resumeUrl} target="_blank" rel="noreferrer" className="btn-outline mt-4 w-full">
-                View Current Resume
-              </a>
+              <button type="button" onClick={handleViewResume} disabled={openingResume} className="btn-outline mt-4 w-full">
+                {openingResume ? 'Opening...' : 'View Current Resume'}
+              </button>
             ) : (
               <p className="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-700">
                 No resume is attached to your profile yet.

@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { fetchJobApplications, updateStatus } from '../features/applicationSlice';
+import api from '../services/api';
 import StatCard from '../components/StatCard';
 import StatusBadge from '../components/StatusBadge';
 import EmptyState from '../components/EmptyState';
@@ -17,6 +18,7 @@ const JobApplications = () => {
   const { jobApplications } = useSelector((state) => state.applications);
   const statusCounts = countByStatus(jobApplications);
   const score = averageScore(jobApplications);
+  const [openingResumeId, setOpeningResumeId] = useState('');
 
   useEffect(() => {
     dispatch(fetchJobApplications(jobId));
@@ -26,6 +28,36 @@ const JobApplications = () => {
     const result = await dispatch(updateStatus({ id, status }));
     if (result.meta.requestStatus === 'fulfilled') toast.success(`Status updated to ${status}`);
     else toast.error('Update failed');
+  };
+
+  const readResumeError = async (err) => {
+    const data = err.response?.data;
+    if (data instanceof Blob) {
+      try {
+        const parsed = JSON.parse(await data.text());
+        return parsed.message;
+      } catch {
+        return '';
+      }
+    }
+    return err.response?.data?.message;
+  };
+
+  const handleViewResume = async (applicationId) => {
+    setOpeningResumeId(applicationId);
+    const resumeWindow = window.open('', '_blank');
+    try {
+      const { data } = await api.get(`/applications/${applicationId}/resume`, { responseType: 'blob' });
+      const url = URL.createObjectURL(data);
+      if (resumeWindow) resumeWindow.location.href = url;
+      else window.open(url, '_blank', 'noopener,noreferrer');
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch (err) {
+      if (resumeWindow) resumeWindow.close();
+      toast.error((await readResumeError(err)) || 'Resume could not be opened');
+    } finally {
+      setOpeningResumeId('');
+    }
   };
 
   return (
@@ -80,10 +112,15 @@ const JobApplications = () => {
                     <p className="mt-2 text-3xl font-bold text-slate-950">
                       {app.aiReview?.score ? `${app.aiReview.score}/100` : '--'}
                     </p>
-                    {app.student?.resumeUrl && (
-                      <a href={app.student.resumeUrl} target="_blank" rel="noreferrer" className="btn-outline mt-4 w-full">
-                        View Resume
-                      </a>
+                    {(app.resumeUrl || app.student?.resumeUrl) && (
+                      <button
+                        type="button"
+                        onClick={() => handleViewResume(app._id)}
+                        disabled={openingResumeId === app._id}
+                        className="btn-outline mt-4 w-full"
+                      >
+                        {openingResumeId === app._id ? 'Opening...' : 'View Resume'}
+                      </button>
                     )}
                   </div>
                   <div className="rounded-lg bg-slate-50 p-4">

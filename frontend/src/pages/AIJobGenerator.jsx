@@ -1,18 +1,31 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../services/api';
 import Icon from '../components/Icon';
+import { createJob } from '../features/jobSlice';
 
 const AIJobGenerator = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const [form, setForm] = useState({
     title: '', skills: '', type: 'internship', location: '', company: user?.company || '',
   });
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [publishing, setPublishing] = useState(false);
 
   const update = (key, value) => setForm((current) => ({ ...current, [key]: value }));
+
+  const normalizeSkills = (value) => {
+    if (Array.isArray(value)) return value.map((skill) => String(skill).trim()).filter(Boolean);
+    return String(value || '')
+      .split(',')
+      .map((skill) => skill.trim())
+      .filter(Boolean);
+  };
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -36,6 +49,33 @@ const AIJobGenerator = () => {
       toast.success('Generated content copied');
     } catch {
       toast.error('Copy failed');
+    }
+  };
+
+  const publishGeneratedJob = async () => {
+    if (!result) return;
+
+    setPublishing(true);
+    try {
+      const payload = {
+        title: form.title,
+        company: form.company || user?.company || 'SmartHire Partner',
+        type: form.type,
+        location: form.location || 'Remote',
+        description: result.description,
+        requirements: result.requirements || [],
+        skills: normalizeSkills(result.skills?.length ? result.skills : form.skills),
+      };
+
+      const action = await dispatch(createJob(payload));
+      if (action.meta.requestStatus === 'fulfilled') {
+        toast.success('AI job posted successfully');
+        navigate('/recruiter');
+      } else {
+        toast.error(action.payload || 'Could not publish job');
+      }
+    } finally {
+      setPublishing(false);
     }
   };
 
@@ -96,9 +136,15 @@ const AIJobGenerator = () => {
               </h2>
             </div>
             {result && (
-              <button type="button" onClick={copyResult} className="btn-outline">
-                Copy
-              </button>
+              <div className="flex flex-wrap gap-2">
+                <button type="button" onClick={copyResult} className="btn-outline">
+                  Copy
+                </button>
+                <button type="button" onClick={publishGeneratedJob} className="btn-primary" disabled={publishing}>
+                  {publishing ? 'Publishing...' : 'Publish Job'}
+                  {!publishing && <Icon name="arrow" className="h-4 w-4" />}
+                </button>
+              </div>
             )}
           </div>
 

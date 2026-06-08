@@ -16,7 +16,7 @@ SmartHire AI is a full-stack MERN job portal for students, recruiters, and admin
 | Recruiter Profiles | Upload Cloudinary-backed profile photos for recruiter accounts |
 | Admin Panel | Manage users, roles, active status, and platform stats |
 | AI Resume Review | OpenAI-powered resume scoring, strengths, and improvements |
-| AI Job Generator | Generates job descriptions, requirements, and skill tags |
+| AI Job Generator | Generates job descriptions, requirements, skill tags, and publishes generated listings |
 | Resume Upload | Cloudinary-backed PDF/DOC/DOCX upload |
 | Profile Photo Upload | Cloudinary-backed JPG/PNG/WEBP avatars for students and recruiters |
 | Notifications | Socket.IO notification flow plus stored notification history |
@@ -326,11 +326,12 @@ demo-assets/
 |   |-- maha-siddiqui-profile.png
 |   `-- sara-malik-profile.png
 `-- resumes/
+    |-- ayesha-khan-resume.pdf
     |-- hamza-raza-resume.pdf
     `-- sara-malik-resume.pdf
 ```
 
-The generated resume PDFs are for demo students except `Ayesha Khan` / `student@smarthire.ai`. Profile photos are generated for all non-admin demo users.
+The generated resume PDFs cover the seeded demo students, including `Ayesha Khan` / `student@smarthire.ai`. Profile photos are generated for all non-admin demo users.
 
 After running `npm run seed`, run the demo asset sync command so the seeded database points to real files in your Cloudinary account instead of placeholder/demo URLs:
 
@@ -339,13 +340,16 @@ cd backend
 npm run sync-demo-assets
 ```
 
-This script uploads the generated resumes and profile photos to Cloudinary, updates user profile photo URLs, updates Sara and Hamza resume URLs, and repairs existing application `resumeUrl` values. If a recruiter clicks `View Resume` and Cloudinary returns `404`, run this script again.
+This script uploads the generated resumes and profile photos to Cloudinary, updates user profile photo URLs, updates Ayesha, Sara, and Hamza resume URLs, and repairs existing application `resumeUrl` values. If a recruiter clicks `View Resume` and Cloudinary returns `404`, run this script again.
 
 Important notes:
 
 - `backend/.env` must contain working `MONGO_URI` and `CLOUDINARY_*` values before running the sync.
 - Run `npm.cmd run sync-demo-assets` on Windows PowerShell if `npm run sync-demo-assets` is blocked by execution policy.
 - Do not manually use `res.cloudinary.com/demo/...` URLs for seeded resumes because those files may not exist.
+- The app opens resumes through protected backend API routes instead of direct browser links to Cloudinary. This keeps the demo usable for logged-in students and recruiters.
+- The Azure backend deployment bundles the generated demo resume PDFs, so seeded resumes can still open even when Cloudinary blocks public PDF delivery.
+- If a direct Cloudinary PDF URL returns `401`, open Cloudinary Console settings and enable public delivery for PDF/ZIP files. Without that account-level setting, uploaded PDF/Word files can exist but Cloudinary may still block browser access.
 - The script does not upload an admin profile photo.
 
 For production or Azure testing, set a strong `ADMIN_PASSWORD` in `backend/.env` locally and in Azure App Service application settings, then run:
@@ -403,7 +407,7 @@ Before deployment, test these flows locally:
 - Student and recruiter can upload profile photos
 - Demo resume/profile assets are synced to Cloudinary with `npm run sync-demo-assets`
 - AI resume review returns a score
-- AI job generator returns a job description
+- AI job generator returns a job description, then `Publish Job` creates the listing
 - Recruiter sees new application notification
 - Recruiter updates application status
 - Student sees status notification
@@ -610,6 +614,9 @@ When `NODE_ENV=production`, the script requires `ADMIN_PASSWORD` and will not us
 - If MongoDB fails, check `MONGO_URI`, Atlas password, Atlas Network Access, and `DNS_SERVERS`.
 - If Cloudinary upload fails, check the three `CLOUDINARY_*` values.
 - If `View Resume` opens a Cloudinary `404`, run `npm run sync-demo-assets` from the backend folder to upload the generated demo PDFs and repair application resume URLs.
+- If `View Resume` still cannot open resumes after deployment, confirm the latest backend deploy included `demo-assets/resumes` and the latest frontend deploy is using the protected resume buttons.
+- If a direct Cloudinary resume URL opens a `401`, enable PDF/ZIP delivery in Cloudinary account security settings. Direct Cloudinary PDF URLs can be blocked even when the app upload succeeds.
+- If an AI-generated job description does not appear in Jobs, make sure you clicked `Publish Job` after generation. Generating text alone only creates a draft preview.
 - If AI routes use fallback data, check `AI_API_KEY`.
 - If frontend requests are blocked by CORS, add the final Vercel URL to `FRONTEND_URL` and `FRONTEND_URLS`, save, then restart Azure.
 - If Vercel lists multiple production/preview domains, include each domain in `FRONTEND_URLS`. Otherwise login may show `Network Error` even though the backend health URL works.

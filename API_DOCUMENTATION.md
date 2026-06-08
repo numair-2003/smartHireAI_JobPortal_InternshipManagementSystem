@@ -281,6 +281,22 @@ Field:
 
 - `resume`: PDF, DOC, or DOCX file up to 5MB
 
+### View Current Profile Resume
+
+`GET /applications/resume/current`
+
+Access: Student
+
+Returns the logged-in student's current resume file as an inline document response. The frontend uses this protected API route instead of opening Cloudinary links directly, because Cloudinary accounts can block direct PDF/Word delivery.
+
+### View Application Resume
+
+`GET /applications/:id/resume`
+
+Access: Application owner student, job owner recruiter, or Admin
+
+Returns the resume attached to a specific application as an inline document response. For seeded demo applications, the Azure deployment includes local demo PDF fallbacks so recruiter review pages can open resumes reliably.
+
 ### My Applications
 
 `GET /applications/my`

@@ -20,8 +20,9 @@ const profileAssets = [
 ];
 
 const resumeAssets = [
-  { email: 'sara.demo@smarthire.ai', file: 'sara-malik-resume.pdf', publicId: 'sara-malik-resume' },
-  { email: 'hamza.demo@smarthire.ai', file: 'hamza-raza-resume.pdf', publicId: 'hamza-raza-resume' },
+  { email: 'student@smarthire.ai', file: 'ayesha-khan-resume.pdf', publicId: 'ayesha-khan-resume.pdf' },
+  { email: 'sara.demo@smarthire.ai', file: 'sara-malik-resume.pdf', publicId: 'sara-malik-resume.pdf' },
+  { email: 'hamza.demo@smarthire.ai', file: 'hamza-raza-resume.pdf', publicId: 'hamza-raza-resume.pdf' },
 ];
 
 const requireEnv = (name) => {
