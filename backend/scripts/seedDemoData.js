@@ -10,6 +10,13 @@ const demoPassword = 'password123';
 const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
 const adminPasswordLabel = process.env.ADMIN_PASSWORD ? '<ADMIN_PASSWORD from backend/.env>' : 'admin123';
 
+const demoResumeUrl = (fileName) => `https://res.cloudinary.com/demo/raw/upload/v1/smarthire/resumes/${fileName}`;
+const demoResumeFiles = {
+  ayesha: 'ayesha-khan-resume.pdf',
+  sara: 'sara-malik-resume.pdf',
+  hamza: 'hamza-raza-resume.pdf',
+};
+
 const users = [
   {
     name: 'Ayesha Khan',
@@ -17,7 +24,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+92 300 1234567',
-    resumeUrl: 'https://res.cloudinary.com/demo/raw/upload/v1/smarthire/resumes/ayesha-resume.pdf',
+    resumeUrl: demoResumeUrl(demoResumeFiles.ayesha),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.ayesha}`,
   },
   {
     name: 'Bilal Ahmed',
@@ -39,7 +47,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+92 333 4455667',
-    resumeUrl: 'https://res.cloudinary.com/demo/raw/upload/v1/smarthire/resumes/sara-resume.pdf',
+    resumeUrl: demoResumeUrl(demoResumeFiles.sara),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.sara}`,
   },
   {
     name: 'Hamza Raza',
@@ -47,7 +56,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+92 302 8899001',
-    resumeUrl: 'https://res.cloudinary.com/demo/raw/upload/v1/smarthire/resumes/hamza-resume.pdf',
+    resumeUrl: demoResumeUrl(demoResumeFiles.hamza),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.hamza}`,
   },
   {
     name: 'Maha Siddiqui',
@@ -62,6 +72,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+44 7700 900123',
+    resumeUrl: demoResumeUrl(demoResumeFiles.sara),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.sara}`,
   },
   {
     name: 'Lucas Meyer',
@@ -69,6 +81,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+49 1512 3456789',
+    resumeUrl: demoResumeUrl(demoResumeFiles.hamza),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.hamza}`,
   },
   {
     name: 'Sofia Garcia',
@@ -76,6 +90,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+34 612 345 678',
+    resumeUrl: demoResumeUrl(demoResumeFiles.ayesha),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.ayesha}`,
   },
   {
     name: 'Omar Hassan',
@@ -83,6 +99,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+971 50 123 4567',
+    resumeUrl: demoResumeUrl(demoResumeFiles.sara),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.sara}`,
   },
   {
     name: 'Mei Chen',
@@ -90,6 +108,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+65 8123 4567',
+    resumeUrl: demoResumeUrl(demoResumeFiles.hamza),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.hamza}`,
   },
   {
     name: 'Olivia Smith',
@@ -349,6 +369,7 @@ const ensureUser = async (data) => {
     existing.company = data.company || '';
     existing.phone = data.phone || '';
     existing.resumeUrl = data.resumeUrl || existing.resumeUrl;
+    existing.resumePublicId = data.resumePublicId || existing.resumePublicId;
     existing.isActive = true;
     existing.password = data.password;
     await existing.save();
@@ -477,6 +498,7 @@ const seed = async () => {
     {
       job: createdJobs[5]._id,
       student: emma._id,
+      resumeUrl: emma.resumeUrl,
       coverLetter: 'I have completed cloud fundamentals coursework and enjoy debugging deployment pipelines and monitoring dashboards.',
       status: 'reviewed',
       aiReview: {
@@ -489,6 +511,7 @@ const seed = async () => {
     {
       job: createdJobs[6]._id,
       student: omar._id,
+      resumeUrl: omar.resumeUrl,
       coverLetter: 'My coursework includes SQL dashboards and customer analytics. I am excited to apply data skills in a fintech environment.',
       status: 'shortlisted',
       aiReview: {
@@ -501,6 +524,7 @@ const seed = async () => {
     {
       job: createdJobs[7]._id,
       student: lucas._id,
+      resumeUrl: lucas.resumeUrl,
       coverLetter: 'I enjoy designing clear product flows in Figma and validating them with quick usability sessions.',
       status: 'pending',
       aiReview: {
@@ -513,6 +537,7 @@ const seed = async () => {
     {
       job: createdJobs[8]._id,
       student: mei._id,
+      resumeUrl: mei.resumeUrl,
       coverLetter: 'I have built Node.js integrations and experimented with prompt evaluation for AI-assisted workflows.',
       status: 'accepted',
       aiReview: {
@@ -525,6 +550,7 @@ const seed = async () => {
     {
       job: createdJobs[9]._id,
       student: sofia._id,
+      resumeUrl: sofia.resumeUrl,
       coverLetter: 'I want to grow in QA automation by testing real user flows, forms, dashboards, and release journeys.',
       status: 'reviewed',
       aiReview: {
@@ -537,6 +563,7 @@ const seed = async () => {
     {
       job: createdJobs[10]._id,
       student: mei._id,
+      resumeUrl: mei.resumeUrl,
       coverLetter: 'I have React experience and want to deepen my React Native skills for secure mobile product screens.',
       status: 'pending',
       aiReview: {
@@ -549,6 +576,7 @@ const seed = async () => {
     {
       job: createdJobs[11]._id,
       student: lucas._id,
+      resumeUrl: lucas.resumeUrl,
       coverLetter: 'I am interested in web security, OWASP basics, and structured incident notes for application teams.',
       status: 'shortlisted',
       aiReview: {
@@ -561,6 +589,7 @@ const seed = async () => {
     {
       job: createdJobs[12]._id,
       student: emma._id,
+      resumeUrl: emma.resumeUrl,
       coverLetter: 'I have used GitHub Actions in coursework and want hands-on practice with Azure deployment workflows.',
       status: 'pending',
       aiReview: {
