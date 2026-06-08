@@ -4,13 +4,17 @@ Backend API for the SmartHire AI job portal and internship management system.
 
 ## Base URLs
 
-- Local API: `http://localhost:5000/api`
-- Local Socket.IO: `http://localhost:5000`
-- Azure API: `https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api`
-- Azure Socket.IO: `https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net`
-- Root check: `GET http://localhost:5000/`
-- Health check: `GET http://localhost:5000/api/health`
-- Azure health check: `GET https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health`
+| Resource | Link |
+| --- | --- |
+| Local API | [http://localhost:5000/api](http://localhost:5000/api) |
+| Local Socket.IO | [http://localhost:5000](http://localhost:5000) |
+| Azure API | [https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api) |
+| Azure Socket.IO | [https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net) |
+| Local root check | [GET http://localhost:5000/](http://localhost:5000/) |
+| Local health check | [GET http://localhost:5000/api/health](http://localhost:5000/api/health) |
+| Azure health check | [GET https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health) |
+| Live frontend | [SmartHire AI on Vercel](https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app) |
+| GitHub repository | [numair-2003/smartHireAI_JobPortal_InternshipManagementSystem](https://github.com/numair-2003/smartHireAI_JobPortal_InternshipManagementSystem) |
 
 ## Authentication
 
@@ -53,7 +57,7 @@ Create `backend/.env` from `backend/.env.example`.
 | `CLOUDINARY_API_SECRET` | Required for uploads | Cloudinary API secret |
 | `EMAIL_USER` | Optional | Gmail address for Nodemailer status emails |
 | `EMAIL_PASS` | Optional | Gmail app password |
-| `FRONTEND_URL` | Yes | Primary allowed frontend origin, for example `http://localhost:3000` locally or the Vercel URL in production |
+| `FRONTEND_URL` | Yes | Primary allowed frontend origin, for example [http://localhost:3000](http://localhost:3000) locally or the Vercel URL in production |
 | `FRONTEND_URLS` | Recommended | Comma-separated allowed frontend origins, useful for allowing both local and deployed frontend URLs |
 | `AI_API_KEY` | Optional | OpenAI API key. Add this only on the backend or Azure App Service, never in frontend/Vercel. If missing or blocked by quota/rate/billing limits, AI routes use demo fallback responses |
 | `ADMIN_EMAIL` | Optional | Email for `npm run create-admin` |
@@ -480,15 +484,11 @@ Admins cannot delete their own logged-in admin account.
 
 Socket URL locally:
 
-```text
-http://localhost:5000
-```
+[http://localhost:5000](http://localhost:5000)
 
 Socket URL after Azure backend deployment:
 
-```text
-https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
-```
+[https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net)
 
 Client joins a personal room after login:
 

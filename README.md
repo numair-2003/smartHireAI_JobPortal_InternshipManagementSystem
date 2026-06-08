@@ -4,6 +4,24 @@ Final Project - MERN Stack Internship
 
 SmartHire AI is a full-stack MERN job portal for students, recruiters, and admins. It includes JWT authentication, role-based dashboards, job and internship posting, profile photo uploads, resume uploads, application tracking, AI resume review, AI job description generation, email alerts, and real-time notification support.
 
+## Quick Links
+
+| Resource | Link |
+| --- | --- |
+| GitHub Repository | [numair-2003/smartHireAI_JobPortal_InternshipManagementSystem](https://github.com/numair-2003/smartHireAI_JobPortal_InternshipManagementSystem) |
+| Live Frontend | [SmartHire AI on Vercel](https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app) |
+| Backend Root Check | [Azure backend root](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/) |
+| Backend Health Check | [Azure backend health](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health) |
+| Backend API Base | [Azure API base](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api) |
+| API Documentation | [API_DOCUMENTATION.md](API_DOCUMENTATION.md) |
+| MongoDB Atlas | [MongoDB Atlas](https://cloud.mongodb.com/) |
+| MongoDB Compass | [MongoDB Compass Download](https://www.mongodb.com/try/download/compass) |
+| Cloudinary Console | [Cloudinary Console](https://console.cloudinary.com/) |
+| OpenAI Platform | [OpenAI Platform](https://platform.openai.com/) |
+| Microsoft Azure Portal | [Azure Portal](https://portal.azure.com/) |
+| Vercel Dashboard | [Vercel Dashboard](https://vercel.com/dashboard) |
+| Cloudflare WARP | [Cloudflare WARP / 1.1.1.1](https://one.one.one.one/) |
+
 ## Features
 
 | Feature | Description |
@@ -125,9 +143,7 @@ MONGO_URI=mongodb://127.0.0.1:27017/smarthire-ai
 
 Backend runs on:
 
-```text
-http://localhost:5000
-```
+[http://localhost:5000](http://localhost:5000)
 
 ### Connect MongoDB Atlas With Compass
 
@@ -232,9 +248,7 @@ npm start
 
 Frontend runs on:
 
-```text
-http://localhost:3000
-```
+[http://localhost:3000](http://localhost:3000)
 
 ## Environment Variables
 
@@ -276,6 +290,15 @@ FRONTEND_URL=https://smart-hire-ai-job-portal-internship.vercel.app
 FRONTEND_URLS=https://smart-hire-ai-job-portal-internship.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-b60023dlz.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app,http://localhost:3000
 ```
 
+Clickable frontend origins referenced above:
+
+- [Primary frontend alias](https://smart-hire-ai-job-portal-internship.vercel.app)
+- [Current Vercel frontend deployment](https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app)
+- [Vercel frontend deployment variant](https://smart-hire-ai-job-portal-internship-management-syste-b60023dlz.vercel.app)
+- [Vercel frontend deployment variant](https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app)
+- [Vercel Git preview deployment](https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app)
+- [Local frontend](http://localhost:3000)
+
 ### Frontend `.env`
 
 ```env
@@ -291,6 +314,11 @@ Production frontend URL settings used for this deployment:
 REACT_APP_API_URL=https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
 REACT_APP_SOCKET_URL=https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
 ```
+
+Clickable backend URLs referenced above:
+
+- [Azure backend API base](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api)
+- [Azure backend Socket.IO/root URL](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net)
 
 Never commit real `.env` files or secret keys to GitHub.
 
@@ -450,17 +478,11 @@ Current local verification completed:
 
 ## API Documentation
 
-See:
-
-```text
-API_DOCUMENTATION.md
-```
+See [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
 
 Main API base URL locally:
 
-```text
-http://localhost:5000/api
-```
+[http://localhost:5000/api](http://localhost:5000/api)
 
 ## Deployment Plan
 
@@ -565,9 +587,7 @@ smarthire-ai-backend-numairfahad
 
 The Azure app name is used by GitHub Actions. The public backend URL is the full default domain:
 
-```text
-https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net
-```
+[https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net)
 
 To let GitHub deploy to Azure:
 
@@ -606,10 +626,8 @@ GitHub Actions should start automatically. You can also run it manually from Git
 
 #### 6. Test the deployed backend
 
-```text
-https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/
-https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health
-```
+- [Backend root check](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/)
+- [Backend health check](https://smarthire-ai-backend-numairfahad-fcacdxh4b2guehgc.uaenorth-01.azurewebsites.net/api/health)
 
 Expected health response:
 
