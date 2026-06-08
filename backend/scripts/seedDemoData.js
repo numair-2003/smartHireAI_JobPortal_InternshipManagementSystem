@@ -56,6 +56,65 @@ const users = [
     role: 'recruiter',
     company: 'DataPulse AI',
   },
+  {
+    name: 'Emma Johnson',
+    email: 'emma.demo@smarthire.ai',
+    password: demoPassword,
+    role: 'student',
+    phone: '+44 7700 900123',
+  },
+  {
+    name: 'Lucas Meyer',
+    email: 'lucas.demo@smarthire.ai',
+    password: demoPassword,
+    role: 'student',
+    phone: '+49 1512 3456789',
+  },
+  {
+    name: 'Sofia Garcia',
+    email: 'sofia.demo@smarthire.ai',
+    password: demoPassword,
+    role: 'student',
+    phone: '+34 612 345 678',
+  },
+  {
+    name: 'Omar Hassan',
+    email: 'omar.demo@smarthire.ai',
+    password: demoPassword,
+    role: 'student',
+    phone: '+971 50 123 4567',
+  },
+  {
+    name: 'Mei Chen',
+    email: 'mei.demo@smarthire.ai',
+    password: demoPassword,
+    role: 'student',
+    phone: '+65 8123 4567',
+  },
+  {
+    name: 'Olivia Smith',
+    email: 'olivia.recruiter@smarthire.ai',
+    password: demoPassword,
+    role: 'recruiter',
+    company: 'CloudBridge Analytics',
+    phone: '+44 20 7946 0123',
+  },
+  {
+    name: 'Carlos Rivera',
+    email: 'carlos.recruiter@smarthire.ai',
+    password: demoPassword,
+    role: 'recruiter',
+    company: 'NexaWorks',
+    phone: '+1 512 555 0184',
+  },
+  {
+    name: 'Priya Nair',
+    email: 'priya.recruiter@smarthire.ai',
+    password: demoPassword,
+    role: 'recruiter',
+    company: 'FinEdge Digital',
+    phone: '+971 55 234 7890',
+  },
 ];
 
 const jobs = [
@@ -144,6 +203,142 @@ const jobs = [
     skills: ['UX Research', 'Figma', 'User Interviews', 'Product Thinking'],
     applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 16),
   },
+  {
+    title: 'Junior Cloud Engineer',
+    company: 'CloudBridge Analytics',
+    type: 'full-time',
+    location: 'London, United Kingdom',
+    salary: 'GBP 38k - 48k',
+    description:
+      'Support cloud-hosted analytics products, deployment pipelines, monitoring dashboards, and customer-facing platform reliability.',
+    requirements: [
+      'Basic understanding of cloud platforms and Linux',
+      'Comfortable reading logs and debugging deployment issues',
+      'Foundational knowledge of CI/CD workflows',
+      'Interest in observability and production support',
+    ],
+    skills: ['Azure', 'Docker', 'CI/CD', 'Linux', 'Monitoring'],
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 35),
+  },
+  {
+    title: 'Data Analyst Intern',
+    company: 'FinEdge Digital',
+    type: 'internship',
+    location: 'Dubai, UAE',
+    salary: 'AED 4k - 6k',
+    description:
+      'Analyze fintech product metrics, build reporting dashboards, and help teams understand customer onboarding and transaction behavior.',
+    requirements: [
+      'Strong Excel or spreadsheet analysis skills',
+      'Basic SQL knowledge',
+      'Ability to explain insights clearly',
+      'Interest in fintech products and customer journeys',
+    ],
+    skills: ['SQL', 'Excel', 'Power BI', 'Analytics', 'Fintech'],
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 24),
+  },
+  {
+    title: 'Product Design Intern',
+    company: 'PixelForge Studio',
+    type: 'internship',
+    location: 'Berlin, Germany',
+    salary: 'EUR 1.2k - 1.8k',
+    description:
+      'Design clean SaaS workflows, prototype user journeys, and collaborate with engineers to ship polished interface improvements.',
+    requirements: [
+      'Figma portfolio with product screens',
+      'Understanding of responsive web layouts',
+      'Comfort with usability testing notes',
+      'Good visual hierarchy and typography sense',
+    ],
+    skills: ['Figma', 'Product Design', 'Prototyping', 'Usability Testing'],
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 27),
+  },
+  {
+    title: 'AI Engineer Associate',
+    company: 'NeuralForge AI',
+    type: 'full-time',
+    location: 'San Francisco, USA',
+    salary: 'USD 95k - 125k',
+    description:
+      'Build AI-assisted workflow features, evaluate LLM outputs, integrate APIs, and improve prompt-driven automation for business teams.',
+    requirements: [
+      'Python or JavaScript API development experience',
+      'Understanding of LLM prompting and evaluation',
+      'Ability to design reliable fallback behavior',
+      'Strong debugging and documentation habits',
+    ],
+    skills: ['OpenAI API', 'Python', 'Node.js', 'Prompt Engineering', 'Evaluation'],
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 32),
+  },
+  {
+    title: 'QA Automation Intern',
+    company: 'NexaWorks',
+    type: 'internship',
+    location: 'Austin, USA',
+    salary: 'USD 22 - 28/hr',
+    description:
+      'Write automated browser tests, verify release flows, and help product teams catch regressions before customer demos.',
+    requirements: [
+      'JavaScript testing fundamentals',
+      'Interest in Playwright or Cypress',
+      'Clear bug reporting skills',
+      'Comfort testing forms, dashboards, and APIs',
+    ],
+    skills: ['Playwright', 'Cypress', 'JavaScript', 'QA', 'Regression Testing'],
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 20),
+  },
+  {
+    title: 'Mobile App Developer Intern',
+    company: 'FinEdge Digital',
+    type: 'internship',
+    location: 'Singapore',
+    salary: 'SGD 1.5k - 2.2k',
+    description:
+      'Help build mobile-first fintech screens, reusable React Native components, and smooth authentication experiences.',
+    requirements: [
+      'React or React Native fundamentals',
+      'Understanding of mobile UI states',
+      'Basic REST API integration experience',
+      'Interest in secure fintech workflows',
+    ],
+    skills: ['React Native', 'React', 'REST APIs', 'Mobile UI', 'Authentication'],
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+  },
+  {
+    title: 'Cybersecurity Analyst Trainee',
+    company: 'SecureWave Labs',
+    type: 'contract',
+    location: 'Amsterdam, Netherlands',
+    salary: 'EUR 2.8k - 3.6k',
+    description:
+      'Review security alerts, document incident patterns, and support teams with practical web application security checks.',
+    requirements: [
+      'Basic networking and web security awareness',
+      'Interest in OWASP concepts',
+      'Good written investigation notes',
+      'Ability to follow triage playbooks',
+    ],
+    skills: ['OWASP', 'Security Monitoring', 'Networking', 'Incident Triage'],
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 26),
+  },
+  {
+    title: 'DevOps Intern',
+    company: 'CloudBridge Analytics',
+    type: 'internship',
+    location: 'Toronto, Canada',
+    salary: 'CAD 24 - 30/hr',
+    description:
+      'Assist with deployment automation, environment configuration, uptime checks, and release notes for analytics teams.',
+    requirements: [
+      'Basic GitHub Actions knowledge',
+      'Comfort with environment variables and logs',
+      'Interest in cloud deployments',
+      'Careful documentation habits',
+    ],
+    skills: ['GitHub Actions', 'Azure', 'Deployment', 'Environment Variables', 'DevOps'],
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 22),
+  },
 ];
 
 const ensureUser = async (data) => {
@@ -175,7 +370,17 @@ const seed = async () => {
     createdUsers[user.email] = await ensureUser(user);
   }
 
-  const demoCompanies = ['TechNova Labs', 'DataPulse AI', 'BrightByte Studio'];
+  const demoCompanies = [
+    'TechNova Labs',
+    'DataPulse AI',
+    'BrightByte Studio',
+    'CloudBridge Analytics',
+    'FinEdge Digital',
+    'PixelForge Studio',
+    'NeuralForge AI',
+    'NexaWorks',
+    'SecureWave Labs',
+  ];
   const oldJobs = await Job.find({ company: { $in: demoCompanies } }).select('_id');
   const oldJobIds = oldJobs.map((job) => job._id);
   await Promise.all([
@@ -188,6 +393,12 @@ const seed = async () => {
     'TechNova Labs': createdUsers['recruiter@smarthire.ai'],
     'DataPulse AI': createdUsers['maha.demo@smarthire.ai'],
     'BrightByte Studio': createdUsers['recruiter@smarthire.ai'],
+    'CloudBridge Analytics': createdUsers['olivia.recruiter@smarthire.ai'],
+    'FinEdge Digital': createdUsers['priya.recruiter@smarthire.ai'],
+    'PixelForge Studio': createdUsers['carlos.recruiter@smarthire.ai'],
+    'NeuralForge AI': createdUsers['olivia.recruiter@smarthire.ai'],
+    'NexaWorks': createdUsers['carlos.recruiter@smarthire.ai'],
+    'SecureWave Labs': createdUsers['priya.recruiter@smarthire.ai'],
   };
 
   const createdJobs = [];
@@ -199,10 +410,15 @@ const seed = async () => {
     }));
   }
 
-  const [student, sara, hamza] = [
+  const [student, sara, hamza, emma, lucas, sofia, omar, mei] = [
     createdUsers['student@smarthire.ai'],
     createdUsers['sara.demo@smarthire.ai'],
     createdUsers['hamza.demo@smarthire.ai'],
+    createdUsers['emma.demo@smarthire.ai'],
+    createdUsers['lucas.demo@smarthire.ai'],
+    createdUsers['sofia.demo@smarthire.ai'],
+    createdUsers['omar.demo@smarthire.ai'],
+    createdUsers['mei.demo@smarthire.ai'],
   ];
 
   await Application.insertMany([
@@ -258,6 +474,102 @@ const seed = async () => {
         improvements: ['Add API testing details'],
       },
     },
+    {
+      job: createdJobs[5]._id,
+      student: emma._id,
+      coverLetter: 'I have completed cloud fundamentals coursework and enjoy debugging deployment pipelines and monitoring dashboards.',
+      status: 'reviewed',
+      aiReview: {
+        score: 79,
+        feedback: 'Good cloud learning signal with practical deployment interest.',
+        strengths: ['Cloud fundamentals', 'Strong troubleshooting mindset'],
+        improvements: ['Add production monitoring examples', 'Mention specific CI/CD tools used'],
+      },
+    },
+    {
+      job: createdJobs[6]._id,
+      student: omar._id,
+      coverLetter: 'My coursework includes SQL dashboards and customer analytics. I am excited to apply data skills in a fintech environment.',
+      status: 'shortlisted',
+      aiReview: {
+        score: 84,
+        feedback: 'Strong regional fit and useful analytics foundation for the Dubai internship.',
+        strengths: ['SQL and dashboard exposure', 'Clear fintech motivation'],
+        improvements: ['Add one quantified analytics project', 'List visualization tools more clearly'],
+      },
+    },
+    {
+      job: createdJobs[7]._id,
+      student: lucas._id,
+      coverLetter: 'I enjoy designing clear product flows in Figma and validating them with quick usability sessions.',
+      status: 'pending',
+      aiReview: {
+        score: 77,
+        feedback: 'Relevant design motivation with room to show more shipped product examples.',
+        strengths: ['Figma and user flow experience', 'Good usability mindset'],
+        improvements: ['Add portfolio links', 'Show responsive design cases'],
+      },
+    },
+    {
+      job: createdJobs[8]._id,
+      student: mei._id,
+      coverLetter: 'I have built Node.js integrations and experimented with prompt evaluation for AI-assisted workflows.',
+      status: 'accepted',
+      aiReview: {
+        score: 89,
+        feedback: 'Strong technical alignment with AI workflow and API requirements.',
+        strengths: ['API integration experience', 'Prompt evaluation interest'],
+        improvements: ['Add reliability testing details'],
+      },
+    },
+    {
+      job: createdJobs[9]._id,
+      student: sofia._id,
+      coverLetter: 'I want to grow in QA automation by testing real user flows, forms, dashboards, and release journeys.',
+      status: 'reviewed',
+      aiReview: {
+        score: 82,
+        feedback: 'Good QA fit with a clear interest in browser automation and release quality.',
+        strengths: ['Testing mindset', 'Clear bug reporting focus'],
+        improvements: ['Add Playwright or Cypress practice examples'],
+      },
+    },
+    {
+      job: createdJobs[10]._id,
+      student: mei._id,
+      coverLetter: 'I have React experience and want to deepen my React Native skills for secure mobile product screens.',
+      status: 'pending',
+      aiReview: {
+        score: 76,
+        feedback: 'Good frontend foundation for mobile work, with space to show native mobile experience.',
+        strengths: ['React fundamentals', 'API integration awareness'],
+        improvements: ['Add mobile project samples', 'Mention authentication flows built'],
+      },
+    },
+    {
+      job: createdJobs[11]._id,
+      student: lucas._id,
+      coverLetter: 'I am interested in web security, OWASP basics, and structured incident notes for application teams.',
+      status: 'shortlisted',
+      aiReview: {
+        score: 80,
+        feedback: 'Promising security trainee profile with useful documentation habits.',
+        strengths: ['Security interest', 'Good written triage approach'],
+        improvements: ['Add home lab or CTF examples', 'Clarify networking fundamentals'],
+      },
+    },
+    {
+      job: createdJobs[12]._id,
+      student: emma._id,
+      coverLetter: 'I have used GitHub Actions in coursework and want hands-on practice with Azure deployment workflows.',
+      status: 'pending',
+      aiReview: {
+        score: 78,
+        feedback: 'Relevant DevOps learning path and strong motivation for deployment automation.',
+        strengths: ['GitHub Actions interest', 'Environment configuration awareness'],
+        improvements: ['Add examples of logs/debugging', 'List any cloud projects deployed'],
+      },
+    },
   ]);
 
   await Notification.insertMany([
@@ -285,11 +597,44 @@ const seed = async () => {
       link: '/admin',
       isRead: false,
     },
+    {
+      user: createdUsers['olivia.recruiter@smarthire.ai']._id,
+      title: 'Global roles are live',
+      message: 'CloudBridge Analytics and NeuralForge AI demo listings are ready for review.',
+      type: 'job',
+      link: '/recruiter',
+      isRead: false,
+    },
+    {
+      user: createdUsers['priya.recruiter@smarthire.ai']._id,
+      title: 'New international applicants',
+      message: 'Candidates have applied to your FinEdge Digital and SecureWave Labs roles.',
+      type: 'application',
+      link: '/recruiter',
+      isRead: false,
+    },
   ]);
 
   console.log('Demo data seeded successfully.');
-  console.log('Student: student@smarthire.ai / password123');
-  console.log('Recruiter: recruiter@smarthire.ai / password123');
+  console.log('Students:');
+  [
+    'student@smarthire.ai',
+    'sara.demo@smarthire.ai',
+    'hamza.demo@smarthire.ai',
+    'emma.demo@smarthire.ai',
+    'lucas.demo@smarthire.ai',
+    'sofia.demo@smarthire.ai',
+    'omar.demo@smarthire.ai',
+    'mei.demo@smarthire.ai',
+  ].forEach((email) => console.log(`- ${email} / password123`));
+  console.log('Recruiters:');
+  [
+    'recruiter@smarthire.ai',
+    'maha.demo@smarthire.ai',
+    'olivia.recruiter@smarthire.ai',
+    'carlos.recruiter@smarthire.ai',
+    'priya.recruiter@smarthire.ai',
+  ].forEach((email) => console.log(`- ${email} / password123`));
   console.log(`Admin: admin@smarthire.ai / ${adminPasswordLabel}`);
   if (!process.env.ADMIN_PASSWORD) {
     console.log('Warning: seeded admin is using the demo password. Set ADMIN_PASSWORD before public deployment.');

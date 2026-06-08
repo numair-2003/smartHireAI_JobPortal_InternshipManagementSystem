@@ -526,8 +526,21 @@ After running `npm run seed`:
 | Role | Email | Password |
 | --- | --- | --- |
 | Student | `student@smarthire.ai` | `password123` |
+| Student | `sara.demo@smarthire.ai` | `password123` |
+| Student | `hamza.demo@smarthire.ai` | `password123` |
+| Student | `emma.demo@smarthire.ai` | `password123` |
+| Student | `lucas.demo@smarthire.ai` | `password123` |
+| Student | `sofia.demo@smarthire.ai` | `password123` |
+| Student | `omar.demo@smarthire.ai` | `password123` |
+| Student | `mei.demo@smarthire.ai` | `password123` |
 | Recruiter | `recruiter@smarthire.ai` | `password123` |
+| Recruiter | `maha.demo@smarthire.ai` | `password123` |
+| Recruiter | `olivia.recruiter@smarthire.ai` | `password123` |
+| Recruiter | `carlos.recruiter@smarthire.ai` | `password123` |
+| Recruiter | `priya.recruiter@smarthire.ai` | `password123` |
 | Admin | `admin@smarthire.ai` | Uses `ADMIN_PASSWORD` if set; otherwise demo fallback `admin123` |
+
+The seed script also creates international demo listings in London, Dubai, Berlin, San Francisco, Austin, Singapore, Amsterdam, and Toronto, plus sample applications for multiple recruiters.
 
 Change demo credentials before using the app publicly. The seed script uses `ADMIN_PASSWORD` for the seeded admin when it is configured. If `admin@smarthire.ai` already exists, `npm run create-admin` promotes that account to admin and updates the password when `ADMIN_PASSWORD` is configured.
 

@@ -308,10 +308,21 @@ Demo accounts:
 | Role | Email | Password |
 | --- | --- | --- |
 | Student | `student@smarthire.ai` | `password123` |
+| Student | `sara.demo@smarthire.ai` | `password123` |
+| Student | `hamza.demo@smarthire.ai` | `password123` |
+| Student | `emma.demo@smarthire.ai` | `password123` |
+| Student | `lucas.demo@smarthire.ai` | `password123` |
+| Student | `sofia.demo@smarthire.ai` | `password123` |
+| Student | `omar.demo@smarthire.ai` | `password123` |
+| Student | `mei.demo@smarthire.ai` | `password123` |
 | Recruiter | `recruiter@smarthire.ai` | `password123` |
+| Recruiter | `maha.demo@smarthire.ai` | `password123` |
+| Recruiter | `olivia.recruiter@smarthire.ai` | `password123` |
+| Recruiter | `carlos.recruiter@smarthire.ai` | `password123` |
+| Recruiter | `priya.recruiter@smarthire.ai` | `password123` |
 | Admin | `admin@smarthire.ai` | Uses `ADMIN_PASSWORD` if set; otherwise demo fallback `admin123` |
 
-The seed script creates demo jobs, applications, AI resume scores, and notifications.
+The seed script creates demo jobs, applications, AI resume scores, and notifications. Demo jobs include Pakistan-based roles plus international roles in London, Dubai, Berlin, San Francisco, Austin, Singapore, Amsterdam, and Toronto.
 
 Important: before seeding data for a public/live demo, set a strong `ADMIN_PASSWORD` in `backend/.env`. Otherwise the seed script warns and uses the demo fallback admin password.
 
@@ -333,7 +344,7 @@ demo-assets/
     `-- sara-malik-resume.pdf
 ```
 
-The generated resume PDFs cover the seeded demo students, including `Ayesha Khan` / `student@smarthire.ai`. Profile photos are generated for all non-admin demo users.
+The generated resume PDFs cover the core seeded demo students, including `Ayesha Khan` / `student@smarthire.ai`, `Sara Malik`, and `Hamza Raza`. Newer global demo students are included for richer account testing and can upload resumes from their student dashboards.
 
 After running `npm run seed`, run the demo asset sync command so the seeded database points to real files in your Cloudinary account instead of placeholder/demo URLs:
 

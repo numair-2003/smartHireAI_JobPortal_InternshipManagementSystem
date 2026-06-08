@@ -5,7 +5,16 @@ export const platformStats = [
   { label: 'Avg response time', value: '36h', detail: 'From application to first update', icon: 'clock', tone: 'amber' },
 ];
 
-export const trustedCompanies = ['TechNova', 'CloudCraft', 'DataPulse', 'BrightByte', 'SkillBridge', 'DevNest'];
+export const trustedCompanies = [
+  'TechNova',
+  'DataPulse',
+  'CloudBridge',
+  'FinEdge',
+  'NeuralForge',
+  'NexaWorks',
+  'SecureWave',
+  'PixelForge',
+];
 
 export const roleTracks = [
   {
@@ -78,5 +87,41 @@ export const demoJobs = [
     description: 'Support AI feature testing, product analytics, and resume review workflow improvements.',
     applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 12).toISOString(),
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
+  },
+  {
+    _id: 'demo-cloud-engineer',
+    title: 'Junior Cloud Engineer',
+    company: 'CloudBridge Analytics',
+    location: 'London, United Kingdom',
+    type: 'full-time',
+    salary: 'GBP 38k - 48k',
+    skills: ['Azure', 'Docker', 'CI/CD', 'Monitoring'],
+    description: 'Support cloud-hosted analytics products, deployment pipelines, and platform reliability.',
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 35).toISOString(),
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
+  },
+  {
+    _id: 'demo-ai-engineer',
+    title: 'AI Engineer Associate',
+    company: 'NeuralForge AI',
+    location: 'San Francisco, USA',
+    type: 'full-time',
+    salary: 'USD 95k - 125k',
+    skills: ['OpenAI API', 'Node.js', 'Prompt Engineering', 'Evaluation'],
+    description: 'Build AI-assisted workflow features, evaluate LLM outputs, and integrate production APIs.',
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 32).toISOString(),
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+  },
+  {
+    _id: 'demo-data-analyst',
+    title: 'Data Analyst Intern',
+    company: 'FinEdge Digital',
+    location: 'Dubai, UAE',
+    type: 'internship',
+    salary: 'AED 4k - 6k',
+    skills: ['SQL', 'Power BI', 'Analytics', 'Fintech'],
+    description: 'Analyze fintech product metrics and build reporting dashboards for customer onboarding insights.',
+    applicationDeadline: new Date(Date.now() + 1000 * 60 * 60 * 24 * 24).toISOString(),
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 6).toISOString(),
   },
 ];
