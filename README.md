@@ -375,11 +375,16 @@ demo-assets/
 |   `-- sara-malik-profile.png
 `-- resumes/
     |-- ayesha-khan-resume.pdf
+    |-- emma-johnson-resume.pdf
     |-- hamza-raza-resume.pdf
-    `-- sara-malik-resume.pdf
+    |-- lucas-meyer-resume.pdf
+    |-- mei-chen-resume.pdf
+    |-- omar-hassan-resume.pdf
+    |-- sara-malik-resume.pdf
+    `-- sofia-garcia-resume.pdf
 ```
 
-The generated resume PDFs cover the core seeded demo students, including `Ayesha Khan` / `student@smarthire.ai`, `Sara Malik`, and `Hamza Raza`. Newer global demo students are included for richer account testing and can upload resumes from their student dashboards.
+The generated resume PDFs cover all seeded demo students: `Ayesha Khan`, `Sara Malik`, `Hamza Raza`, `Emma Johnson`, `Lucas Meyer`, `Sofia Garcia`, `Omar Hassan`, and `Mei Chen`.
 
 After running `npm run seed`, run the demo asset sync command so the seeded database points to real files in your Cloudinary account instead of placeholder/demo URLs:
 
@@ -388,7 +393,7 @@ cd backend
 npm run sync-demo-assets
 ```
 
-This script uploads the generated resumes and profile photos to Cloudinary, updates user profile photo URLs, updates Ayesha, Sara, and Hamza resume URLs, and repairs existing application `resumeUrl` values. If a recruiter clicks `View Resume` and Cloudinary returns `404`, run this script again.
+This script uploads the generated resumes and profile photos to Cloudinary, updates user profile photo URLs, updates all seeded student resume URLs, and repairs existing application `resumeUrl` values. If a recruiter clicks `View Resume` and Cloudinary returns `404`, run this script again.
 
 Important notes:
 
@@ -427,7 +432,7 @@ npm run seed
 npm run sync-demo-assets
 ```
 
-This project already includes that fix: the extra global demo students reuse bundled demo resume files so the seed script can create valid application records every time.
+This project already includes that fix: every seeded student has a bundled demo resume file, so the seed script can create valid application records every time.
 
 For production or Azure testing, set a strong `ADMIN_PASSWORD` in `backend/.env` locally and in Azure App Service application settings, then run:
 

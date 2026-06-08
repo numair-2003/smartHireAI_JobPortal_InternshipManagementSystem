@@ -83,7 +83,7 @@ npm run sync-demo-assets
 - `npm start`: starts the API with Node.
 - `npm run seed`: creates demo students, recruiters, jobs, applications, and notifications.
 - `npm run create-admin`: creates or promotes an admin user using `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
-- `npm run sync-demo-assets`: uploads generated demo profile photos/resumes to Cloudinary and repairs seeded resume/profile URLs.
+- `npm run sync-demo-assets`: uploads generated demo profile photos and all seeded student resumes to Cloudinary, then repairs seeded resume/profile URLs.
 
 ## Auth Routes
 
@@ -561,7 +561,7 @@ If seeding fails with:
 Application validation failed: resumeUrl: Path `resumeUrl` is required.
 ```
 
-make sure the latest `backend/scripts/seedDemoData.js` is pulled/deployed. The fixed seed script assigns bundled demo resume URLs to all seeded students and includes `resumeUrl: student.resumeUrl` on every seeded application.
+make sure the latest `backend/scripts/seedDemoData.js` is pulled/deployed. The fixed seed script assigns a bundled demo resume URL to every seeded student and includes `resumeUrl: student.resumeUrl` on every seeded application.
 
 After pulling the fix, run:
 

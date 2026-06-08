@@ -15,6 +15,11 @@ const demoResumeFiles = {
   ayesha: 'ayesha-khan-resume.pdf',
   sara: 'sara-malik-resume.pdf',
   hamza: 'hamza-raza-resume.pdf',
+  emma: 'emma-johnson-resume.pdf',
+  lucas: 'lucas-meyer-resume.pdf',
+  sofia: 'sofia-garcia-resume.pdf',
+  omar: 'omar-hassan-resume.pdf',
+  mei: 'mei-chen-resume.pdf',
 };
 
 const users = [
@@ -72,8 +77,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+44 7700 900123',
-    resumeUrl: demoResumeUrl(demoResumeFiles.sara),
-    resumePublicId: `smarthire/resumes/${demoResumeFiles.sara}`,
+    resumeUrl: demoResumeUrl(demoResumeFiles.emma),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.emma}`,
   },
   {
     name: 'Lucas Meyer',
@@ -81,8 +86,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+49 1512 3456789',
-    resumeUrl: demoResumeUrl(demoResumeFiles.hamza),
-    resumePublicId: `smarthire/resumes/${demoResumeFiles.hamza}`,
+    resumeUrl: demoResumeUrl(demoResumeFiles.lucas),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.lucas}`,
   },
   {
     name: 'Sofia Garcia',
@@ -90,8 +95,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+34 612 345 678',
-    resumeUrl: demoResumeUrl(demoResumeFiles.ayesha),
-    resumePublicId: `smarthire/resumes/${demoResumeFiles.ayesha}`,
+    resumeUrl: demoResumeUrl(demoResumeFiles.sofia),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.sofia}`,
   },
   {
     name: 'Omar Hassan',
@@ -99,8 +104,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+971 50 123 4567',
-    resumeUrl: demoResumeUrl(demoResumeFiles.sara),
-    resumePublicId: `smarthire/resumes/${demoResumeFiles.sara}`,
+    resumeUrl: demoResumeUrl(demoResumeFiles.omar),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.omar}`,
   },
   {
     name: 'Mei Chen',
@@ -108,8 +113,8 @@ const users = [
     password: demoPassword,
     role: 'student',
     phone: '+65 8123 4567',
-    resumeUrl: demoResumeUrl(demoResumeFiles.hamza),
-    resumePublicId: `smarthire/resumes/${demoResumeFiles.hamza}`,
+    resumeUrl: demoResumeUrl(demoResumeFiles.mei),
+    resumePublicId: `smarthire/resumes/${demoResumeFiles.mei}`,
   },
   {
     name: 'Olivia Smith',
