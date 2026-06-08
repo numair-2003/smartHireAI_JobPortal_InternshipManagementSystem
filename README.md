@@ -266,7 +266,9 @@ EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
 FRONTEND_URL=http://localhost:3000
 FRONTEND_URLS=http://localhost:3000,https://your-frontend.vercel.app
-AI_API_KEY=your_openai_api_key
+AI_PROVIDER=gemini
+AI_MODEL=gemini-2.5-flash
+AI_API_KEY=your_google_gemini_or_openai_api_key
 ADMIN_EMAIL=admin@smarthire.ai
 ADMIN_PASSWORD=change_this_admin_password
 SCM_DO_BUILD_DURING_DEPLOYMENT=true
@@ -275,13 +277,15 @@ ENABLE_ORYX_BUILD=true
 
 For Azure App Service production settings, use `backend/.env.azure.example` as a reference and add the values in Azure App Service application settings instead of committing a real `.env` file.
 
-OpenAI key note:
+AI provider key note:
 
 - `AI_API_KEY` belongs only in `backend/.env` for local testing and Azure App Service application settings for production.
 - Do not add `AI_API_KEY` to Vercel frontend environment variables.
-- Do not commit a real OpenAI key to GitHub.
-- After rotating or replacing the OpenAI key in Azure, click `Apply` or `Save`, then restart the Azure App Service.
-- If the OpenAI account has no quota or billing credits, SmartHire returns demo fallback AI responses instead of breaking the app.
+- Use `AI_PROVIDER=gemini` and `AI_MODEL=gemini-2.5-flash` for Google Gemini API keys.
+- Use `AI_PROVIDER=openai` and an OpenAI model such as `gpt-4o-mini` if switching back to OpenAI later.
+- Do not commit a real Gemini/OpenAI key to GitHub.
+- After rotating or replacing the AI key in Azure, click `Apply` or `Save`, then restart the Azure App Service.
+- If the AI provider has no quota, billing credits, or available free-tier capacity, SmartHire returns demo fallback AI responses instead of breaking the app.
 
 Production backend URL settings used for this deployment:
 
@@ -580,7 +584,9 @@ EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
 FRONTEND_URL=https://smart-hire-ai-job-portal-internship.vercel.app
 FRONTEND_URLS=https://smart-hire-ai-job-portal-internship.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-3r6ls1r2y.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-b60023dlz.vercel.app,https://smart-hire-ai-job-portal-internship-management-syste-obddo08su.vercel.app,https://smart-hire-ai-job-portal-inter-git-50b9b0-numair-2003s-projects.vercel.app,http://localhost:3000
-AI_API_KEY=your_openai_api_key
+AI_PROVIDER=gemini
+AI_MODEL=gemini-2.5-flash
+AI_API_KEY=your_google_gemini_or_openai_api_key
 ADMIN_EMAIL=admin@smarthire.ai
 ADMIN_PASSWORD=your_strong_admin_password
 SCM_DO_BUILD_DURING_DEPLOYMENT=true
@@ -704,7 +710,7 @@ When `NODE_ENV=production`, the script requires `ADMIN_PASSWORD` and will not us
 - If `View Resume` still cannot open resumes after deployment, confirm the latest backend deploy included `demo-assets/resumes` and the latest frontend deploy is using the protected resume buttons.
 - If a direct Cloudinary resume URL opens a `401`, enable PDF/ZIP delivery in Cloudinary account security settings. Direct Cloudinary PDF URLs can be blocked even when the app upload succeeds.
 - If an AI-generated job description does not appear in Jobs, make sure you clicked `Publish Job` after generation. Generating text alone only creates a draft preview.
-- If AI routes use fallback data, check `AI_API_KEY`.
+- If AI routes use fallback data, check `AI_PROVIDER`, `AI_MODEL`, `AI_API_KEY`, and the provider quota/billing page. For Gemini, use `AI_PROVIDER=gemini` and `AI_MODEL=gemini-2.5-flash`.
 - If frontend requests are blocked by CORS, add the final Vercel URL to `FRONTEND_URL` and `FRONTEND_URLS`, save, then restart Azure.
 - If Vercel lists multiple production/preview domains, include each domain in `FRONTEND_URLS`. Otherwise login may show `Network Error` even though the backend health URL works.
 - The backend also allows the SmartHire Vercel preview URL pattern used by this project, so new preview deployments do not need a code change every time Vercel creates a new temporary URL.

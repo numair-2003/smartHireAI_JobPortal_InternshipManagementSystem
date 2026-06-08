@@ -1,8 +1,32 @@
 const OpenAI = require('openai');
 
+const geminiBaseUrl = 'https://generativelanguage.googleapis.com/v1beta/openai/';
+
+const getProvider = () => {
+  const configuredProvider = String(process.env.AI_PROVIDER || '').trim().toLowerCase();
+  if (configuredProvider) return configuredProvider;
+
+  // Gemini API keys usually start with AIza. This keeps existing AI_API_KEY setup working.
+  if (String(process.env.AI_API_KEY || '').startsWith('AIza')) return 'gemini';
+
+  return 'openai';
+};
+
+const getDefaultModel = (provider) => {
+  if (provider === 'gemini') return 'gemini-2.5-flash';
+  return 'gpt-4o-mini';
+};
+
 const getClient = () => {
   if (!process.env.AI_API_KEY) return null;
-  return new OpenAI({ apiKey: process.env.AI_API_KEY });
+
+  const provider = getProvider();
+  const baseURL = process.env.AI_BASE_URL || (provider === 'gemini' ? geminiBaseUrl : undefined);
+
+  return new OpenAI({
+    apiKey: process.env.AI_API_KEY,
+    ...(baseURL ? { baseURL } : {}),
+  });
 };
 
 const parseJsonFromText = (text) => {
@@ -61,6 +85,8 @@ const createFallbackJobDescription = ({ title, skills, type, location, company }
 
 const reviewResume = async ({ resumeText, jobTitle, jobSkills = [] }) => {
   const client = getClient();
+  const provider = getProvider();
+  const model = process.env.AI_MODEL || getDefaultModel(provider);
   const skillList = normalizeSkills(jobSkills);
   const prompt = `Review this resume for a "${jobTitle}" role.
 Skills needed: ${skillList.join(', ') || 'general'}
@@ -76,7 +102,7 @@ Return ONLY valid JSON:
 
   try {
     const completion = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
     });
@@ -92,6 +118,8 @@ Return ONLY valid JSON:
 
 const generateJobDescription = async ({ title, skills, type, location, company }) => {
   const client = getClient();
+  const provider = getProvider();
+  const model = process.env.AI_MODEL || getDefaultModel(provider);
   const skillList = normalizeSkills(skills);
   const prompt = `Generate a professional job posting as JSON for:
 Title: ${title}
@@ -109,7 +137,7 @@ Return ONLY valid JSON:
 
   try {
     const completion = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.5,
     });
