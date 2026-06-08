@@ -15,8 +15,16 @@ const profileAssets = [
   { email: 'student@smarthire.ai', file: 'ayesha-khan-profile.png', publicId: 'ayesha-khan-profile' },
   { email: 'sara.demo@smarthire.ai', file: 'sara-malik-profile.png', publicId: 'sara-malik-profile' },
   { email: 'hamza.demo@smarthire.ai', file: 'hamza-raza-profile.png', publicId: 'hamza-raza-profile' },
+  { email: 'emma.demo@smarthire.ai', file: 'emma-johnson-profile.png', publicId: 'emma-johnson-profile' },
+  { email: 'lucas.demo@smarthire.ai', file: 'lucas-meyer-profile.png', publicId: 'lucas-meyer-profile' },
+  { email: 'sofia.demo@smarthire.ai', file: 'sofia-garcia-profile.png', publicId: 'sofia-garcia-profile' },
+  { email: 'omar.demo@smarthire.ai', file: 'omar-hassan-profile.png', publicId: 'omar-hassan-profile' },
+  { email: 'mei.demo@smarthire.ai', file: 'mei-chen-profile.png', publicId: 'mei-chen-profile' },
   { email: 'recruiter@smarthire.ai', file: 'bilal-ahmed-profile.png', publicId: 'bilal-ahmed-profile' },
   { email: 'maha.demo@smarthire.ai', file: 'maha-siddiqui-profile.png', publicId: 'maha-siddiqui-profile' },
+  { email: 'olivia.recruiter@smarthire.ai', file: 'olivia-smith-profile.png', publicId: 'olivia-smith-profile' },
+  { email: 'carlos.recruiter@smarthire.ai', file: 'carlos-rivera-profile.png', publicId: 'carlos-rivera-profile' },
+  { email: 'priya.recruiter@smarthire.ai', file: 'priya-nair-profile.png', publicId: 'priya-nair-profile' },
 ];
 
 const resumeAssets = [

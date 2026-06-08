@@ -564,6 +564,26 @@ Change demo credentials before using the app publicly. The seed script uses `ADM
 
 When `NODE_ENV=production`, `npm run create-admin` requires `ADMIN_PASSWORD` and will not use a demo fallback password.
 
+### Demo Asset Sync
+
+After seeding demo users, run:
+
+```bash
+cd backend
+npm run sync-demo-assets
+```
+
+This uploads bundled demo assets from `demo-assets` to Cloudinary and updates MongoDB records.
+
+The sync covers:
+
+- Generated resume PDFs for every seeded student.
+- Generated profile PNGs for every seeded student and recruiter.
+- No admin profile photo, because the admin account stays initials-only by design.
+- Existing application `resumeUrl` values, so recruiter `View Resume` buttons point to working files.
+
+If a profile photo still shows initials after syncing, confirm `backend/.env` has valid `MONGO_URI` and `CLOUDINARY_*` values, then run `npm run sync-demo-assets` again from the `backend` folder.
+
 ### Demo Seed Resume URL Fix
 
 The `Application` schema requires `resumeUrl`, so every seeded application must include a valid resume URL.

@@ -390,9 +390,17 @@ demo-assets/
 |-- profile-photos/
 |   |-- ayesha-khan-profile.png
 |   |-- bilal-ahmed-profile.png
+|   |-- carlos-rivera-profile.png
+|   |-- emma-johnson-profile.png
 |   |-- hamza-raza-profile.png
+|   |-- lucas-meyer-profile.png
 |   |-- maha-siddiqui-profile.png
-|   `-- sara-malik-profile.png
+|   |-- mei-chen-profile.png
+|   |-- olivia-smith-profile.png
+|   |-- omar-hassan-profile.png
+|   |-- priya-nair-profile.png
+|   |-- sara-malik-profile.png
+|   `-- sofia-garcia-profile.png
 `-- resumes/
     |-- ayesha-khan-resume.pdf
     |-- emma-johnson-resume.pdf
@@ -404,7 +412,11 @@ demo-assets/
     `-- sofia-garcia-resume.pdf
 ```
 
+The same asset inventory is also listed in [demo-assets/README.txt](demo-assets/README.txt).
+
 The generated resume PDFs cover all seeded demo students: `Ayesha Khan`, `Sara Malik`, `Hamza Raza`, `Emma Johnson`, `Lucas Meyer`, `Sofia Garcia`, `Omar Hassan`, and `Mei Chen`.
+
+The generated profile PNGs cover all seeded students and recruiters except the admin account, so the demo can show real account photos after Cloudinary sync instead of initials-only placeholders.
 
 After running `npm run seed`, run the demo asset sync command so the seeded database points to real files in your Cloudinary account instead of placeholder/demo URLs:
 
